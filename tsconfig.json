@@ -23,7 +23,8 @@
       "@/*": ["./src/*"],
       "@jsx/*": ["./src/*"],
       "@clsDecimal": ["./src/components/clsDecimal/clsDecimal"],
-      "@clsNavButton": ["./src/components/clsNavButton/clsNavButton"]
+      "@clsNavButton": ["./src/components/clsNavButton/clsNavButton"],
+      "@clsEconomicsUtils": ["./src/app/(layouts)/economics/layout"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

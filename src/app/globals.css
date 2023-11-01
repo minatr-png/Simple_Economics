@@ -55,7 +55,42 @@ body {
   height: 100%;
 }
 
-/*Economics general*/
+/*Logo global*/
+#NavigationLogo {
+  display: inline-flex;
+
+  position: absolute;
+  top: 20px;
+  left: 20px;
+
+  font-size: 30px;
+}
+
+#NavigationLogo > img {
+  max-height: 39px;
+  float: left;
+
+  margin-right: 5px;
+}
+
+#NavigationLogo > span {
+  margin-left: 5px;
+}
+
+#NavigationLogo  button > span {
+  height: 26px;
+  width: 26px;
+
+  display: flex;
+  align-items: center;
+  padding: 0 3px 3px 0;
+
+  background: rgb(255 255 255 / 10%);
+  border: 1px solid rgb(255 255 255 / 28%);
+  border-radius: 5px;
+}
+
+/*Economics global*/
 .bg-economics {
   background: linear-gradient(45deg, #864BA2, #3230bf);
 }

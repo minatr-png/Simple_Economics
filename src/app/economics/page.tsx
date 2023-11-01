@@ -1,11 +1,16 @@
 "use client";
-import Link from "next/link";
+import PocketBase from 'pocketbase';
 import styles from  './styles.module.css';
 import CurrencyInput  from 'react-currency-input-field';
 import CLSNavButton from '@clsNavButton';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { AddRecordLayout, NavButtonsLayout } from '@clsEconomicsUtils';
 
 export default function Page() {
     
+    const db = new PocketBase('http://127.0.0.1:8090');
+
     let amount;
     const inpChange = (val) => {            
         amount = val;
@@ -20,32 +25,53 @@ export default function Page() {
     }
 
     const onEsnterPress = (ev, tabIndex:number) => {
-        console.log(ev);
         if (ev.key !== "Enter") return;
         
-        if(tabIndex === 2) {
-            document.getElementById("SubmitExpense").click();
+        if(tabIndex === 3) {
+            document.getElementById("MainButton").click();
         } else {
             (document.querySelector(`[tabindex="${tabIndex+1}"]`) as any).focus();
         }
     }
     
     const submitExpense = () => {
-        console.log('hola');
+        let category, date;
+        category = (document.getElementById('categoryInput') as HTMLSelectElement).value;
+        date = (document.getElementById('dateInput') as HTMLInputElement).value;
+ 
+        if (category && date && amount) {
+            const data = {
+                "amount": amount,
+                "category": category,
+                "date": "2022-01-01 10:00:00.123Z"
+            };
+
+            db.collection('Expenses').create(data).then( rec => {
+                toast.success('Gasto añadido', {
+                    position: 'bottom-right',
+                    autoClose: 1700
+                });
+            });
+        } else {
+            
+            toast.error('Faltan campos por rellenar', {
+                position: 'bottom-right',
+                autoClose: 1700
+            });
+        }
     }
 
-    //<CLSDecimal ref={customInputRef} placeholder="0.00€"></CLSDecimal>
     return (
         <div id="moduleContainer" className={styles.economics + " bg-economics"}>
-            <div className={styles.inputsGroup}>
+            <AddRecordLayout params={{btnTitle: "Añadir gasto", btnFunction: submitExpense}}>
                 <div>
                     <span>Gasto: </span>
                     <CurrencyInput id="amountInput" placeholder="0.00€" onValueChange={inpChange} groupSeparator='.' decimalSeparator=',' suffix='€' 
-                        onKeyUp={(ev) => onEsnterPress(ev, 0)} tabIndex={0}></CurrencyInput>
+                        onKeyUp={(ev) => onEsnterPress(ev, 1)} tabIndex={1}></CurrencyInput>
                 </div>
                 <div>
                     <span>Categoría: </span>
-                    <select onKeyUp={(ev) => onEsnterPress(ev, 1)} tabIndex={1}>
+                    <select id="categoryInput" onKeyUp={(ev) => onEsnterPress(ev, 2)} tabIndex={2}>
                         <option value="otros">-</option>
                         <option value="compra">La compra</option>
                         <option value="energia">Energía</option>
@@ -61,14 +87,15 @@ export default function Page() {
                 </div>
                 <div>
                     <span>Fecha: </span>
-                    <input id="monthInput" type="date" defaultValue={getCurrentDate()} onKeyUp={(ev) => onEsnterPress(ev, 2)} required tabIndex={2}></input>
+                    <input id="dateInput" type="date" defaultValue={getCurrentDate()} onKeyUp={(ev) => onEsnterPress(ev, 3)} required tabIndex={3}></input>
                 </div>
-                <button id="SubmitExpense" onClick={submitExpense}>Añadir gasto</button>
-            </div>
-            <div className={styles.navigationGroup}>
+            </AddRecordLayout>
+            <NavButtonsLayout>
                 <CLSNavButton title="Gráficas" route="/economics/graphs"></CLSNavButton>
                 <CLSNavButton title="Gastos" route="/economics/expenses"></CLSNavButton>
-            </div>
+                <CLSNavButton title="Añadir categoría" route="/economics/categories"></CLSNavButton>
+                <ToastContainer />
+            </NavButtonsLayout>
         </div>
     );
 }
