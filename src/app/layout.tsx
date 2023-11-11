@@ -2,6 +2,7 @@ import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import CLSNavButton from '@clsNavButton';
+import Link from "next/link";
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -20,7 +21,7 @@ export default function RootLayout({
       <body className={inter.className}>
         {children}
         <div id="NavigationLogo">
-          <img src='/logo.png'></img>
+          <Link href="/"><img src='/logo.png' ></img></Link>
           <CLSNavButton title="<" goBack={true}></CLSNavButton>
           <CLSNavButton title=">" goForward={true}></CLSNavButton>
         </div>

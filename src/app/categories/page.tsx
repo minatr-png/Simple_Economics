@@ -2,7 +2,7 @@
 import styles from  '../styles.module.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { AddRecordLayout, NavButtonsLayout } from '@clsEconomicsUtils';
+import { AddRecordLayout, NavButtonsLayout } from '@/app/(layouts)/layout';
 
 export default function Page() {
     return (

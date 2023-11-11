@@ -1,4 +1,4 @@
-import styles from '../../economics/styles.module.css';
+import styles from '../styles.module.css';
 
 export function AddRecordLayout({
     children,
