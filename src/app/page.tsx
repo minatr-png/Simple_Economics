@@ -5,7 +5,8 @@ import CurrencyInput  from 'react-currency-input-field';
 import CLSNavButton from '@clsNavButton';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { AddRecordLayout, NavButtonsLayout } from '@/app/(layouts)/layout';
+import { AddRecordLayout, NavButtonsLayout } from '@clsLayouts';
+import onEnterPress from '@clsInputs';
 
 export default function Page() {
     
@@ -22,16 +23,6 @@ export default function Page() {
         const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Month is zero-based
         const day = String(currentDate.getDate()).padStart(2, '0');
         return `${year}-${month}-${day}`;
-    }
-
-    const onEsnterPress = (ev, tabIndex:number) => {
-        if (ev.key !== "Enter") return;
-        
-        if(tabIndex === 3) {
-            document.getElementById("MainButton").click();
-        } else {
-            (document.querySelector(`[tabindex="${tabIndex+1}"]`) as any).focus();
-        }
     }
     
     const submitExpense = () => {
@@ -53,7 +44,6 @@ export default function Page() {
                 });
             });
         } else {
-            
             toast.error('Faltan campos por rellenar', {
                 position: 'bottom-right',
                 autoClose: 1700
@@ -67,11 +57,11 @@ export default function Page() {
                 <div>
                     <span>Gasto: </span>
                     <CurrencyInput id="amountInput" placeholder="0.00€" onValueChange={inpChange} groupSeparator='.' decimalSeparator=',' suffix='€' 
-                        onKeyUp={(ev) => onEsnterPress(ev, 1)} tabIndex={1}></CurrencyInput>
+                        onKeyUp={(ev) => onEnterPress(ev, 1)} tabIndex={1}></CurrencyInput>
                 </div>
                 <div>
                     <span>Categoría: </span>
-                    <select id="categoryInput" onKeyUp={(ev) => onEsnterPress(ev, 2)} tabIndex={2}>
+                    <select id="categoryInput" onKeyUp={(ev) => onEnterPress(ev, 2)} tabIndex={2}>
                         <option value="otros">-</option>
                         <option value="compra">La compra</option>
                         <option value="energia">Energía</option>
@@ -87,7 +77,7 @@ export default function Page() {
                 </div>
                 <div>
                     <span>Fecha: </span>
-                    <input id="dateInput" type="date" defaultValue={getCurrentDate()} onKeyUp={(ev) => onEsnterPress(ev, 3)} required tabIndex={3}></input>
+                    <input id="dateInput" type="date" defaultValue={getCurrentDate()} onKeyUp={(ev) => onEnterPress(ev, 99)} required tabIndex={3}></input>
                 </div>
             </AddRecordLayout>
             <NavButtonsLayout>

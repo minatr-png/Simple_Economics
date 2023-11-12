@@ -24,7 +24,9 @@
       "@jsx/*": ["./src/*"],
       "@clsDecimal": ["./src/components/clsDecimal/clsDecimal"],
       "@clsNavButton": ["./src/components/clsNavButton/clsNavButton"],
-      "@clsEconomicsUtils": ["./src/app/(layouts)/economics/layout"]
+      "@clsSortable": ["./src/components/clsSortable/clsSortable"],
+      "@clsLayouts": ["./src/(utilities)/layout"],
+      "@clsInputs": ["./src/(utilities)/inputsFunctions"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

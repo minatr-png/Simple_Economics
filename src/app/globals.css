@@ -26,6 +26,7 @@ body {
   rgb(var(--background-start-rgb));
 }
 
+/*CSS Multiuses*/
 #moduleContainer {
   width: 100vw;
   height: 100vh;
@@ -33,6 +34,28 @@ body {
 
 .hidden {
   display: none;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey; 
+  border-radius: 10px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgb(255 255 255 / 58%);
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(255 255 255 / 78%); 
 }
 
 /*Application Card*/

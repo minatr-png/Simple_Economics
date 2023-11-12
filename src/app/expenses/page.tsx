@@ -13,7 +13,7 @@ const prueba = () => {
 export default function Page() {
     return (
         <div id="moduleContainer" className={" bg-economics"}>
-            <button onClick={prueba}>Graphs</button>
+            <button onClick={prueba}>Expenses</button>
         </div>
     );
 }

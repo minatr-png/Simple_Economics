@@ -1,0 +1,77 @@
+/* Tabla de categorías*/
+/* General */
+.table {
+    width: 80%;
+    height: 75%;
+
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+
+    border: 1px solid rgb(255 255 255 / 28%);
+    border-radius: 20px;
+}
+
+/* Header */
+.table div.header {
+    height: 50px;
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    border-radius: 20px 20px 0 0;
+    
+    background: rgb(255 255 255 / 58%);
+    color: #4938b8;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* Body */
+.table div.body {
+    width: 100%;
+    height: 70vh;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    border-radius: 0 0 20px 20px;
+
+    background: rgb(255 255 255 / 10%);
+}
+
+.table div.body > div {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    border-bottom: 1px solid gray;
+    padding: 10px 15px;
+}
+
+.table div.body {
+    overflow-y:hidden;
+}
+
+.table div.body:hover {
+    overflow-y: auto;
+}
+
+.table div.body > div :last-child {
+    font-size: 20px;
+}
+
+.table div.body > div :last-child:hover {
+    color: #e3850d;
+    transition: color 0.2s ease-in-out;
+}
+
+.table div.body > div:last-child {
+    border: none;
+}
