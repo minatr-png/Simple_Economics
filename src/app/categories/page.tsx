@@ -74,7 +74,7 @@ export default function Page() {
                 else if (active.id < over.id) new_id = category.id - 1;
                 else new_id = category.id + 1;
 
-                db.collection('Categories').update(category.data.id, {order: new_id});
+                await db.collection('Categories').update(category.data.id, {order: new_id});
             });
         }
     }

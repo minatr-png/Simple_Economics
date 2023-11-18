@@ -3,14 +3,23 @@ import PocketBase from 'pocketbase';
 import styles from  './styles.module.css';
 import CurrencyInput  from 'react-currency-input-field';
 import CLSNavButton from '@clsNavButton';
+import CLSCombo from '@clsCombo';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { AddRecordLayout, NavButtonsLayout } from '@clsLayouts';
 import onEnterPress from '@clsInputs';
+import { useEffect, useState } from 'react';
 
 export default function Page() {
     
     const db = new PocketBase('http://127.0.0.1:8090');
+
+    let [data, setData] = useState([]);
+    useEffect(() => {
+        db.collection('categories').getFullList({ fields: 'id, descrip', sort: 'order' }).then((res) => {
+            setData(res);
+        });
+    }, []);
 
     let amount;
     const inpChange = (val) => {            
@@ -61,19 +70,7 @@ export default function Page() {
                 </div>
                 <div>
                     <span>Categoría: </span>
-                    <select id="categoryInput" onKeyUp={(ev) => onEnterPress(ev, 2)} tabIndex={2}>
-                        <option value="otros">-</option>
-                        <option value="compra">La compra</option>
-                        <option value="energia">Energía</option>
-                        <option value="transporte">Transporte</option>
-                        <option value="bares">Bares y más</option>
-                        <option value="suscripciones">Suscripciones</option>
-                        <option value="caprichos">Caprichos</option>
-                        <option value="regalos">Regalos</option>
-                        <option value="casa">Cosas de casa</option>
-                        <option value="ropa">Ropa</option>
-                        <option value="mascotas">Gatetes</option>
-                    </select>
+                    <CLSCombo data={data} descrip_field="descrip" value_field="id" tabIndex="2" onKeyUp={ev => onEnterPress(ev, 2)}></CLSCombo>
                 </div>
                 <div>
                     <span>Fecha: </span>

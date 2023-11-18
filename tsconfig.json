@@ -25,6 +25,7 @@
       "@clsDecimal": ["./src/components/clsDecimal/clsDecimal"],
       "@clsNavButton": ["./src/components/clsNavButton/clsNavButton"],
       "@clsSortable": ["./src/components/clsSortable/clsSortable"],
+      "@clsCombo": ["./src/components/clsCombo/clsCombo"],
       "@clsLayouts": ["./src/(utilities)/layout"],
       "@clsInputs": ["./src/(utilities)/inputsFunctions"]
     }
