@@ -36,7 +36,7 @@ export default function Page() {
     
     const submitExpense = () => {
         let category, date;
-        category = (document.getElementById('categoryInput') as HTMLSelectElement).value;
+        category = document.getElementById('categoryInput').getAttribute('realvalue');
         date = (document.getElementById('dateInput') as HTMLInputElement).value;
  
         if (category && date && amount) {
@@ -70,7 +70,7 @@ export default function Page() {
                 </div>
                 <div>
                     <span>Categoría: </span>
-                    <CLSCombo data={data} descrip_field="descrip" value_field="id" tabIndex="2" onKeyUp={ev => onEnterPress(ev, 2)}></CLSCombo>
+                    <CLSCombo id="categoryInput" data={data} descrip_field="descrip" value_field="id" tabIndex="2" onKeyUp={ev => onEnterPress(ev, 2)}></CLSCombo>
                 </div>
                 <div>
                     <span>Fecha: </span>

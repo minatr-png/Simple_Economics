@@ -1,6 +1,6 @@
 import './clsCombo.css';
 
-const CLSCombo = ({ data, value_field, descrip_field, tabIndex = "", onKeyUp }) => {
+const CLSCombo = ({ data, value_field, descrip_field, tabIndex = "", id, onKeyUp }) => {
 
   const getNextElement = (start_element) => {
     let next_element = start_element;
@@ -28,6 +28,29 @@ const CLSCombo = ({ data, value_field, descrip_field, tabIndex = "", onKeyUp }) 
     return previous_element;
   }
 
+  const selectElement = (ev) => {
+    let current_selection = combo_div.querySelector('.selected');
+    if (current_selection) {
+      let value_input = combo_div.parentElement.querySelector('input');
+      value_input.value = current_selection.innerHTML;
+      value_input.focus();
+      value_input.setAttribute('realvalue', current_selection.getAttribute('value'));
+
+      var enter_key_event = new KeyboardEvent('keyup', {
+        key: 'Enter',
+        code: 'Enter',
+        which: 13,
+        keyCode: 13,
+        bubbles: true,
+        cancelable: true,
+        shiftKey: ev.shiftKey
+      });
+      combo_div.style.display = 'none';
+
+      value_input.dispatchEvent(enter_key_event);
+    }
+  }
+
   let combo_div;
   const _onFocus = (ev) => {
     combo_div = document.createElement('div');
@@ -41,12 +64,15 @@ const CLSCombo = ({ data, value_field, descrip_field, tabIndex = "", onKeyUp }) 
     filter_input.oninput = ev => _onInput(ev);
     combo_div.append(filter_input);
 
-    //Add data
+    //Add data element
     data.forEach((el, index) => {
       let element_div = document.createElement('div');
       element_div.setAttribute('order', index);
       element_div.setAttribute('value', el[value_field]);
       element_div.append(el[descrip_field]);
+      element_div.onmousedown = ev => selectElement(ev);
+      element_div.onmouseover = ev => _onMouseOver(ev);
+      element_div.onmouseout = ev => _onMouseOut(ev);
       combo_div.append(element_div);
     });
 
@@ -60,6 +86,16 @@ const CLSCombo = ({ data, value_field, descrip_field, tabIndex = "", onKeyUp }) 
     ev.target.parentElement.append(combo_div);
     combo_div.classList.add('visible');
     filter_input.focus();
+  }
+
+  const _onMouseOver = (ev) => {
+    let current_selection = combo_div.querySelector('.selected');
+    if (current_selection) current_selection.classList.remove('selected');
+    ev.target.classList.add('selected');
+  }
+
+  const _onMouseOut = (ev) => {
+    ev.target.classList.remove('selected');
   }
 
   const _onKeyDown = (ev) => {
@@ -80,23 +116,7 @@ const CLSCombo = ({ data, value_field, descrip_field, tabIndex = "", onKeyUp }) 
 
   const _onKeyUp = (ev) => {
     if (ev.key === 'Enter' || ev.key === 'Tab') {
-      let current_selection = combo_div.querySelector('.selected');
-      let value_input = combo_div.parentElement.querySelector('input');
-      value_input.value = current_selection.innerHTML;
-      value_input.focus();
-      value_input.setAttribute('realvalue', current_selection.getAttribute('value'));
-
-      var enter_key_event = new KeyboardEvent('keyup', {
-        key: 'Enter',
-        code: 'Enter',
-        which: 13,
-        keyCode: 13,
-        bubbles: true,
-        cancelable: true,
-      });
-      combo_div.style.display = 'none';
-
-      value_input.dispatchEvent(enter_key_event);
+      selectElement(ev);
     }
   }
 
@@ -123,7 +143,7 @@ const CLSCombo = ({ data, value_field, descrip_field, tabIndex = "", onKeyUp }) 
   }
 
   return (
-    <input onFocus={ev => _onFocus(ev)} onKeyUp={ev => { onKeyUp(ev); }} tabIndex={tabIndex}></input>
+    <input id={id} onFocus={ev => _onFocus(ev)} onKeyUp={ev => { onKeyUp(ev); }} tabIndex={tabIndex}></input>
   );
 }
 

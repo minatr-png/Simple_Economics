@@ -16,3 +16,7 @@
     border-radius: 5px;
     background: rgb(255 255 255 / 10%);
 }
+
+#comboData div {
+    cursor: pointer;
+}
