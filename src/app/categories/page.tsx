@@ -14,7 +14,7 @@ import { CLSSortable } from '@clsSortable';
 
 export default function Page() {
 
-    const db = new PocketBase('http://127.0.0.1:8090');
+    const db = new PocketBase('https://simple-economics.pockethost.io');
 
     const [categories, setCategories] = useState([]);
     useEffect(() => {
@@ -25,6 +25,7 @@ export default function Page() {
     }, []);
 
     const submitCategory = () => {
+        debugger;
         let category = (document.getElementById('descripInput') as HTMLSelectElement).value;
  
         if (category) {

@@ -12,7 +12,7 @@ import { useEffect, useState } from 'react';
 
 export default function Page() {
     
-    const db = new PocketBase('http://127.0.0.1:8090');
+    const db = new PocketBase('https://simple-economics.pockethost.io');
 
     let [data, setData] = useState([]);
     useEffect(() => {

@@ -2,7 +2,7 @@
 import styles from  './styles.module.css';
 import PocketBase from 'pocketbase';
 
-const db = new PocketBase('http://127.0.0.1:8090');
+const db = new PocketBase('https://simple-economics.pockethost.io');
 
 const prueba = () => {
     db.collection('Expenses').getFullList({ sort: '-created' }).then(res => {
