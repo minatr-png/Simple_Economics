@@ -25,7 +25,6 @@ export default function Page() {
     }, []);
 
     const submitCategory = () => {
-        debugger;
         let category = (document.getElementById('descripInput') as HTMLSelectElement).value;
  
         if (category) {
