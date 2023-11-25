@@ -1,0 +1,7 @@
+a button {
+    transition: all 0.7s;
+}
+
+a button:hover {
+    box-shadow: rgb(229 229 229 / 30%) 5px 5px, rgb(173 173 173 / 20%) 10px 10px, rgb(255 255 255 / 10%) 15px 15px, rgb(249 249 249 / 5%) 20px 20px;
+}

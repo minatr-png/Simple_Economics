@@ -1,6 +1,8 @@
 "use client";
 import styles from  './styles.module.css';
 import PocketBase from 'pocketbase';
+import Chart from 'chart.js/auto';
+import { useEffect, useState } from 'react';
 
 const db = new PocketBase('http://127.0.0.1:8090');
 
@@ -11,9 +13,35 @@ const prueba = () => {
 }
 
 export default function Page() {
+    useEffect(() => {
+    var ctx = (document.getElementById('myChart') as any).getContext('2d');
+    let chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+          datasets: [{
+            label: '# of Votes',
+            data: [12, 19, 3, 5, 2, 3],
+            borderWidth: 1
+          }]
+        }
+      });
+    }, []);
+
     return (
-        <div id="moduleContainer" className={" bg-economics"}>
-            <button onClick={prueba}>Graphs</button>
+        <div id="moduleContainer" className={styles.graphs + " bg-economics"}>
+            <div className={styles.header}>
+                <div>&lt;</div>
+                <div>{new Date().getFullYear()}</div>
+                <div>&gt;</div>
+            </div>
+            <div className={styles.body}>
+                <div className={styles.graph}>
+                    <div>
+                        <canvas id='myChart'></canvas>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }
