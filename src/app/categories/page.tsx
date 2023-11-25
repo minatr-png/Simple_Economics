@@ -94,7 +94,7 @@ export default function Page() {
             <AddRecordLayout params={{btnTitle: "Añadir Categoría", btnFunction: submitCategory}} >
                 <div>
                     <span>Categoría: </span>
-                    <input id="descripInput" type="text" placeholder="Otros" required tabIndex={0} onKeyUp={(ev) => onEnterPress(ev, 99)}></input>
+                    <input id="descripInput" type="text" placeholder="Otros" required tabIndex={1} onKeyUp={(ev) => onEnterPress(ev, 1, true)}></input>
                 </div>
             </AddRecordLayout>
             <NavButtonsLayout>

@@ -74,7 +74,7 @@ export default function Page() {
                 </div>
                 <div>
                     <span>Fecha: </span>
-                    <input id="dateInput" type="date" defaultValue={getCurrentDate()} onKeyUp={(ev) => onEnterPress(ev, 99)} required tabIndex={3}></input>
+                    <input id="dateInput" type="date" defaultValue={getCurrentDate()} onKeyUp={(ev) => onEnterPress(ev, 3, true)} required tabIndex={3}></input>
                 </div>
             </AddRecordLayout>
             <NavButtonsLayout>
