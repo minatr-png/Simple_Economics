@@ -1,5 +1,6 @@
 "use client";
 import { database_url } from '@clsGlobals';
+import CLSYearSwitch from '@clsYearSwitch';
 import styles from  './styles.module.css';
 import PocketBase from 'pocketbase';
 import Chart from 'chart.js/auto';
@@ -32,9 +33,7 @@ export default function Page() {
     return (
         <div id="moduleContainer" className={styles.graphs + " bg-economics"}>
             <div className={styles.header}>
-                <div>&lt;</div>
-                <div>{new Date().getFullYear()}</div>
-                <div>&gt;</div>
+                <CLSYearSwitch></CLSYearSwitch>
             </div>
             <div className={styles.body}>
                 <div className={styles.graph}>

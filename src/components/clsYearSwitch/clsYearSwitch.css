@@ -1,0 +1,23 @@
+.yearSwitchContainer {
+    height: 15vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.yearSwitchContainer div {
+    padding: 2px 10px;
+    margin-right: 5px;
+    font-size: 30px;
+
+    border: var(--main-border);
+    border-radius: 10px;
+    cursor: pointer;
+
+    text-align: center;
+}
+
+.yearsContainer div {
+    margin: 0;
+}

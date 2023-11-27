@@ -26,6 +26,7 @@
       "@clsNavButton": ["./src/components/clsNavButton/clsNavButton"],
       "@clsSortable": ["./src/components/clsSortable/clsSortable"],
       "@clsCombo": ["./src/components/clsCombo/clsCombo"],
+      "@clsYearSwitch": ["./src/components/clsYearSwitch/clsYearSwitch"],
       "@clsLayouts": ["./src/(utilities)/layout"],
       "@clsInputs": ["./src/(utilities)/inputsFunctions"],
       "@clsGlobals": ["./src/(utilities)/globalVars"]
