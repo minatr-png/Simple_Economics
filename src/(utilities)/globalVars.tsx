@@ -1,0 +1,1 @@
+export const database_url = 'POCKETBASE_Database_URL';

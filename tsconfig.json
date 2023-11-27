@@ -27,7 +27,8 @@
       "@clsSortable": ["./src/components/clsSortable/clsSortable"],
       "@clsCombo": ["./src/components/clsCombo/clsCombo"],
       "@clsLayouts": ["./src/(utilities)/layout"],
-      "@clsInputs": ["./src/(utilities)/inputsFunctions"]
+      "@clsInputs": ["./src/(utilities)/inputsFunctions"],
+      "@clsGlobals": ["./src/(utilities)/globalVars"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

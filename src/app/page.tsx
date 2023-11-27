@@ -1,4 +1,5 @@
 "use client";
+import { database_url } from '@clsGlobals';
 import PocketBase from 'pocketbase';
 import styles from  './styles.module.css';
 import CurrencyInput  from 'react-currency-input-field';
@@ -12,7 +13,7 @@ import { useEffect, useState } from 'react';
 
 export default function Page() {
     
-    const db = new PocketBase('https://simple-economics.pockethost.io');
+    const db = new PocketBase(database_url);
 
     let [data, setData] = useState([]);
     useEffect(() => {

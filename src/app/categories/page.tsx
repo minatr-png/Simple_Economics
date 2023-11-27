@@ -1,4 +1,5 @@
 "use client";
+import { database_url } from '@clsGlobals';
 import PocketBase from 'pocketbase';
 import general_styles from  '../styles.module.css';
 import styles from  './styles.module.css';
@@ -14,7 +15,7 @@ import { CLSSortable } from '@clsSortable';
 
 export default function Page() {
 
-    const db = new PocketBase('https://simple-economics.pockethost.io');
+    const db = new PocketBase(database_url);
 
     const [categories, setCategories] = useState([]);
     useEffect(() => {

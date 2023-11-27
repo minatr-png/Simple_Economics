@@ -1,10 +1,11 @@
 "use client";
+import { database_url } from '@clsGlobals';
 import styles from  './styles.module.css';
 import PocketBase from 'pocketbase';
 import Chart from 'chart.js/auto';
 import { useEffect, useState } from 'react';
 
-const db = new PocketBase('http://127.0.0.1:8090');
+const db = new PocketBase(database_url);
 
 const prueba = () => {
     db.collection('Expenses').getFullList({ sort: '-created' }).then(res => {
