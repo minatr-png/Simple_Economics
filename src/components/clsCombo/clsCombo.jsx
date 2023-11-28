@@ -83,7 +83,7 @@ const CLSCombo = ({ data, value_field, descrip_field, tabIndex = "", id, onKeyUp
     combo_div.style.left = position_data.left + "px";
     combo_div.style.width = position_data.width + "px";
 
-    ev.target.parentElement.append(combo_div);
+    document.body.append(combo_div);
     combo_div.classList.add('visible');
     filter_input.focus();
   }

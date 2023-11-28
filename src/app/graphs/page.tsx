@@ -15,25 +15,43 @@ const prueba = () => {
 }
 
 export default function Page() {
+    let [years, setYears] = useState([]);
     useEffect(() => {
-    var ctx = (document.getElementById('myChart') as any).getContext('2d');
-    let chart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-          datasets: [{
-            label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3],
-            borderWidth: 1
-          }]
+        db.collection('vExpensesYears').getFullList({ fields: 'year'}).then((res) => {
+            setYears(res.map(el => el.year));
+        });
+
+        var ctx = (document.getElementById('myChart') as any).getContext('2d');
+        let chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+            datasets: [{
+                label: '# of Votes',
+                data: [12, 19, 3, 5, 2, 3],
+                borderWidth: 1
+            }]
+            }
+        });
         }
-      });
+    , []);
+
+    const [expenses, setCategories] = useState([]);
+    useEffect(() => {
+        db.collection('categories').getFullList({ fields: 'order, descrip, id', sort: 'order' }).then((res) => {
+            let loaded_categories = res.map(category => ({ data: { id: category.id, descrip: category.descrip }, id: category.order}));
+            setCategories(loaded_categories);
+        });
     }, []);
+
+    const onYearChange = (year) => {
+        console.log(year);
+    };
 
     return (
         <div id="moduleContainer" className={styles.graphs + " bg-economics"}>
             <div className={styles.header}>
-                <CLSYearSwitch></CLSYearSwitch>
+                <CLSYearSwitch years={years} onChange={year => onYearChange(year)}></CLSYearSwitch>
             </div>
             <div className={styles.body}>
                 <div className={styles.graph}>

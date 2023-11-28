@@ -44,7 +44,7 @@ export default function Page() {
             const data = {
                 "amount": amount,
                 "category": category,
-                "date": "2022-01-01 10:00:00.123Z"
+                "date": date
             };
 
             db.collection('Expenses').create(data).then( rec => {

@@ -2,17 +2,17 @@
 import './clsYearSwitch.css';
 import { useState } from 'react';
 
-const CLSYearSwitch = ({years = [], onChange = () => {}}) => {
+const CLSYearSwitch = ({years = [], onChange = year => {}}) => {
     var [current_year, setYear] = useState(new Date().getFullYear());
 
     const modifyCurrentYear = (modifier) => {
         setYear(year => year + modifier);
-        onChange();
+        onChange(current_year + modifier);
     };
 
     const setCurrentYear = (new_year) => {
         setYear(() => new_year);
-        onChange();
+        onChange(new_year);
     };
 
     const showYearsPopup = (input) => {
