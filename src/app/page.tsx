@@ -65,16 +65,16 @@ export default function Page() {
         <div id="moduleContainer" className={styles.economics + " bg-economics"}>
             <AddRecordLayout params={{btnTitle: "Añadir gasto", btnFunction: submitExpense}}>
                 <div>
-                    <span>Gasto: </span>
+                    <span>Gasto</span>
                     <CurrencyInput id="amountInput" placeholder="0.00€" onValueChange={inpChange} groupSeparator='.' decimalSeparator=',' suffix='€' 
                         onKeyUp={(ev) => onEnterPress(ev, 1)} tabIndex={1}></CurrencyInput>
                 </div>
                 <div>
-                    <span>Categoría: </span>
+                    <span>Categoría</span>
                     <CLSCombo id="categoryInput" data={data} descrip_field="descrip" value_field="id" tabIndex="2" onKeyUp={ev => onEnterPress(ev, 2)}></CLSCombo>
                 </div>
                 <div>
-                    <span>Fecha: </span>
+                    <span>Fecha</span>
                     <input id="dateInput" type="date" defaultValue={getCurrentDate()} onKeyUp={(ev) => onEnterPress(ev, 3, true)} required tabIndex={3}></input>
                 </div>
             </AddRecordLayout>

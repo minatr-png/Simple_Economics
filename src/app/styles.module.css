@@ -37,11 +37,19 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: transform 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
 }
 
 .inputsGroup > div:hover, .inputsGroup > button:hover {
     transform: scale(1.05);
+}
+
+.inputsGroup > div:hover {
+    box-shadow: 0 0 10px -2px white;
+}
+
+.inputsGroup > button:hover {
+    box-shadow: 0 0 10px white;
 }
 
 .inputsGroup > div > span {

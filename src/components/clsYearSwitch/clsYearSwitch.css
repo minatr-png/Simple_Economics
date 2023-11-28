@@ -16,7 +16,17 @@
     cursor: pointer;
 
     text-align: center;
+    transition: all 0.3s ease-in-out;
 }
+
+.yearSwitchContainer div:hover {
+    background: white;
+    color: #523ab5;
+}
+
+.yearSwitchContainer div div {
+    color: white;
+} 
 
 .yearsContainer div {
     margin: 0 0 10px 0;
