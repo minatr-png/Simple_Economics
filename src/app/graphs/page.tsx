@@ -17,7 +17,7 @@ const prueba = () => {
 export default function Page() {
     let [years, setYears] = useState([]);
     useEffect(() => {
-        db.collection('vExpensesYears').getFullList({ fields: 'year'}).then((res) => {
+        db.collection('vExpensesYears').getFullList({ fields: 'year', sort: 'year'}).then((res) => {
             setYears(res.map(el => el.year));
         });
 

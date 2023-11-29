@@ -31,7 +31,7 @@ const CLSCombo = ({ data, value_field, descrip_field, tabIndex = "", id, onKeyUp
   const selectElement = (ev) => {
     let current_selection = combo_div.querySelector('.selected');
     if (current_selection) {
-      let value_input = combo_div.parentElement.querySelector('input');
+      let value_input = document.getElementById(id);
       value_input.value = current_selection.innerHTML;
       value_input.focus();
       value_input.setAttribute('realvalue', current_selection.getAttribute('value'));

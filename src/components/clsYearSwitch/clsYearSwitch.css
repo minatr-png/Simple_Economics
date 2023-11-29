@@ -14,9 +14,11 @@
     border: var(--main-border);
     border-radius: 10px;
     cursor: pointer;
+    user-select: none;
 
     text-align: center;
-    transition: all 0.3s ease-in-out;
+    transition: color 0.3s ease-in-out;
+    transition: background-color 0.3s ease-in-out;
 }
 
 .yearSwitchContainer div:hover {
@@ -28,6 +30,28 @@
     color: white;
 } 
 
+/*Loaded Years*/
+.yearsContainer {
+    height: 50vh;
+    padding-right: 5px;
+
+    overflow-y: auto;
+}
+
 .yearsContainer div {
     margin: 0 0 10px 0;
+    opacity: 0;
+    animation: slide 1s ease-in-out calc(0.25s * var(--n)) forwards;
 }
+  
+@keyframes slide {
+    from {
+      transform: translateY(0);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(10px);
+      opacity: 1;
+    }
+}
+  

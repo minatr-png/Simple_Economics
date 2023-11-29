@@ -52,7 +52,11 @@
     justify-content: space-between;
 
     border-bottom: 1px solid gray;
-    padding: 10px 15px;
+    padding: 10px 0;
+}
+
+.table div.body > div div {
+    margin: 0 15px;
 }
 
 .table div.body {

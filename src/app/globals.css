@@ -1,5 +1,3 @@
-@tailwind base;
-
 :root {
   color: white;
 
@@ -7,13 +5,32 @@
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-    to bottom,
-    transparent,
-    rgb(var(--background-end-rgb))
-  )
-  rgb(var(--background-start-rgb));
+  margin: 0;
+}
+
+input {
+  border: none;
+  padding: 0;
+  font-size: 20px;
+  cursor: text;
+}
+
+a {
+  text-decoration: none;
+}
+
+button {
+  background-color: transparent;
+  border-style: none;
+  padding: 0;
+}
+
+a, button {
+  cursor:pointer;
+}
+
+a, input, button {
+  color: white;
 }
 
 /*CSS Multiuses*/
@@ -48,26 +65,6 @@ body {
   background: rgb(255 255 255 / 78%); 
 }
 
-/*Application Card*/
-.mainPage {
-  /*Center box text*/
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.absoluteCenter {
-  position: absolute; 
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.fill {
-  width: 100%;
-  height: 100%;
-}
-
 /*Logo global*/
 #NavigationLogo {
   display: inline-flex;
@@ -96,11 +93,12 @@ body {
 
   display: flex;
   align-items: center;
-  padding: 0 3px 3px 0;
+  justify-content: center;
 
   background: rgb(255 255 255 / 10%);
   border: 1px solid rgb(255 255 255 / 28%);
   border-radius: 5px;
+  font-size: 20px;
 }
 
 /*Economics global*/
