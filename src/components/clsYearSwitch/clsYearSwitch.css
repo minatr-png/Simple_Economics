@@ -7,7 +7,7 @@
 }
 
 .yearSwitchContainer div {
-    padding: 2px 10px;
+    padding: 4px 10px;
     margin-right: 5px;
     font-size: 30px;
 
@@ -19,6 +19,10 @@
     text-align: center;
     transition: color 0.3s ease-in-out;
     transition: background-color 0.3s ease-in-out;
+}
+
+.yearSwitchContainer div.mainSwitchBtn {
+    padding: 4px 20px;
 }
 
 .yearSwitchContainer div:hover {
@@ -41,6 +45,7 @@
 .yearsContainer div {
     margin: 0 0 10px 0;
     opacity: 0;
+    padding: 0;
     animation: slide 1s ease-in-out calc(0.25s * var(--n)) forwards;
 }
   
