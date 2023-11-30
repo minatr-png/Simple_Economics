@@ -1,0 +1,7 @@
+.sortable {
+    cursor: move;
+}
+
+.sortable .deleteSort {
+    cursor: pointer;
+}

@@ -17,6 +17,8 @@ const CLSYearSwitch = ({years = [], onChange = year => {}}) => {
     };
 
     const showYearsPopup = (input) => {
+        if (years.length === 0) return;
+        
         let current_years_container = document.querySelector('.yearsContainer');
         if(current_years_container) {
             current_years_container.remove();

@@ -22,3 +22,8 @@
     font-weight: bold;
     cursor: pointer;
 }
+
+#comboData {
+    opacity: 0;
+    animation: slide 0.4s linear forwards;
+}

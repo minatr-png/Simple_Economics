@@ -48,15 +48,3 @@
     padding: 0;
     animation: slide 1s ease-in-out calc(0.25s * var(--n)) forwards;
 }
-  
-@keyframes slide {
-    from {
-      transform: translateY(0);
-      opacity: 0;
-    }
-    to {
-      transform: translateY(10px);
-      opacity: 1;
-    }
-}
-  

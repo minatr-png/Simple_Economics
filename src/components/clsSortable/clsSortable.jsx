@@ -1,3 +1,4 @@
+import './clsSortable.css';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { RiDeleteBin7Line } from 'react-icons/ri';
@@ -17,9 +18,9 @@ export function CLSSortable({category, deleteFunction}) {
   };
   
   return (
-    <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
+    <div className='sortable' ref={setNodeRef} style={style} {...attributes} {...listeners}>
       <div>{category.data.descrip}</div>
-      <div onClickCapture={deleteFunction}><RiDeleteBin7Line></RiDeleteBin7Line></div>
+      <div className='deleteSort' onClickCapture={deleteFunction}><RiDeleteBin7Line></RiDeleteBin7Line></div>
     </div>
   );
 }

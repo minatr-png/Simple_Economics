@@ -106,3 +106,16 @@ a, input, button {
 .bg-economics {
   background: linear-gradient(45deg, #864BA2, #3230bf);
 }
+
+
+/* ANIMATIONS */
+@keyframes slide {
+  from {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(10px);
+    opacity: 1;
+  }
+}

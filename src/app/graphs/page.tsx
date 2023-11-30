@@ -23,14 +23,41 @@ export default function Page() {
 
         var ctx = (document.getElementById('myChart') as any).getContext('2d');
         let chart = new Chart(ctx, {
-            type: 'bar',
             data: {
-            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-            datasets: [{
-                label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3],
-                borderWidth: 1
-            }]
+                labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                datasets: [{
+                    type: 'bar',
+                    label: 'Balance',
+                    data: [-12, 19, 3, -5, 2, 3, 3, 5, -9, 10, 11, 12],
+                    borderWidth: 1
+                }, {
+                    label: 'Gastos',
+                    data: [-12, 19, 3, -5, 2, 3, 3, 5, -9, 10, 11, 12],
+                    type: 'line',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        display: true,
+                        labels: {
+                            //color: 'rgb(255, 99, 132)'
+                        }
+                    }
+                }, 
+                scales: {
+                    y: {
+                        ticks: {
+                            //color: 'red'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            //color: 'red'
+                        }
+                    }
+                }
             }
         });
         }
