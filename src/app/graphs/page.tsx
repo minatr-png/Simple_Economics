@@ -15,24 +15,65 @@ const prueba = () => {
 }
 
 export default function Page() {
+    let current_year = new Date().getFullYear();
     let [years, setYears] = useState([]);
     useEffect(() => {
-        db.collection('vExpensesYears').getFullList({ fields: 'year', sort: 'year'}).then((res) => {
+        db.collection('vExpensesYears').getFullList({ fields: 'year', sort: 'year'}).then(res => {
             setYears(res.map(el => el.year));
         });
 
-        var ctx = (document.getElementById('myChart') as any).getContext('2d');
-        let chart = new Chart(ctx, {
+        let expenses_chart, category_chart;
+        db.collection('vExpenses').getFullList({fields: 'amount, category, month',filter: `date >= '${current_year}-01-01' && date <= '${current_year}-12-31'`}).then(res => {
+            let expenses = [0,0,0,0,0,0,0,0,0,0,0,0], balance = [0,0,0,0,0,0,0,0,0,0,0,0], categories_data = {};
+            res.forEach(expense => {
+                balance[expense.month - 1] += expense.amount;
+                if (expense.amount < 0) expenses[expense.month - 1] -= expense.amount;
+
+                if (categories_data[expense.category]) 
+                    categories_data[expense.category] += expense.amount;
+                else 
+                    categories_data[expense.category] = expense.amount;
+            });
+
+            expenses_chart.data.datasets[0].data = balance;
+            expenses_chart.data.datasets[1].data = expenses;
+            expenses_chart.update();
+
+            let category_ctx = (document.getElementById('categoriesChart') as any).getContext('2d');
+            category_chart = new Chart(category_ctx, {
+                type: 'pie',
+                data: {
+                    labels: Object.keys(categories_data),
+                    datasets: [{
+                        data: Object.values(categories_data),
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: {
+                            display: true,
+                            labels: {
+                                color: 'white'
+                            }
+                        }
+                    }
+                }
+            });
+        });
+
+        let expenses_ctx = (document.getElementById('expensesChart') as any).getContext('2d');
+        expenses_chart = new Chart(expenses_ctx, {
             data: {
                 labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
                 datasets: [{
                     type: 'bar',
                     label: 'Balance',
-                    data: [-12, 19, 3, -5, 2, 3, 3, 5, -9, 10, 11, 12],
+                    data: [0,0,0,0,0,0,0,0,0,0,0,0],
                     borderWidth: 1
                 }, {
                     label: 'Gastos',
-                    data: [-12, 19, 3, -5, 2, 3, 3, 5, -9, 10, 11, 12],
+                    data: [0,0,0,0,0,0,0,0,0,0,0,0],
                     type: 'line',
                     borderWidth: 1
                 }]
@@ -42,26 +83,33 @@ export default function Page() {
                     legend: {
                         display: true,
                         labels: {
-                            //color: 'rgb(255, 99, 132)'
+                            color: 'white'
                         }
                     }
                 }, 
                 scales: {
                     y: {
                         ticks: {
-                            //color: 'red'
+                            color: 'white'
+                        }, 
+                        grid: {
+                            color: 'gray'
                         }
                     },
                     x: {
                         ticks: {
-                            //color: 'red'
+                            color: 'white'
+                        },
+                        grid: {
+                            display: false
                         }
                     }
                 }
             }
         });
-        }
-    , []);
+
+        
+    }, []);    
 
     const [expenses, setCategories] = useState([]);
     useEffect(() => {
@@ -78,12 +126,17 @@ export default function Page() {
     return (
         <div id="moduleContainer" className={styles.graphs + " bg-economics"}>
             <div className={styles.header}>
-                <CLSYearSwitch years={years} onChange={year => onYearChange(year)}></CLSYearSwitch>
+                <CLSYearSwitch default_year={current_year} years={years} onChange={year => onYearChange(year)}></CLSYearSwitch>
             </div>
             <div className={styles.body}>
                 <div className={styles.graph}>
                     <div>
-                        <canvas id='myChart'></canvas>
+                        <canvas id='expensesChart'></canvas>
+                    </div>
+                </div>
+                <div className={styles.graph}>
+                    <div>
+                        <canvas id='categoriesChart'></canvas>
                     </div>
                 </div>
             </div>
