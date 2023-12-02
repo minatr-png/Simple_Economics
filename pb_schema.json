@@ -161,6 +161,33 @@
     "options": {}
   },
   {
+    "id": "85rm166n0ss0qe6",
+    "name": "vExpensesYears",
+    "type": "view",
+    "system": false,
+    "schema": [
+        {
+            "system": false,
+            "id": "o4npytbr",
+            "name": "year",
+            "type": "json",
+            "required": false,
+            "presentable": false,
+            "unique": false,
+            "options": {}
+        }
+    ],
+    "indexes": [],
+    "listRule": "",
+    "viewRule": "",
+    "createRule": null,
+    "updateRule": null,
+    "deleteRule": null,
+    "options": {
+        "query": "SELECT DISTINCT strftime('%Y', [date]) AS year, 0 as id FROM Expenses;"
+    }
+},
+{
     "id": "0rp9kmh1gucxt7x",
     "name": "vExpenses",
     "type": "view",
@@ -168,7 +195,7 @@
     "schema": [
       {
         "system": false,
-        "id": "dvdqnyxx",
+        "id": "mjjnk11e",
         "name": "amount",
         "type": "number",
         "required": true,
@@ -182,7 +209,7 @@
       },
       {
         "system": false,
-        "id": "dsqo2gfw",
+        "id": "vtznel7b",
         "name": "category",
         "type": "text",
         "required": true,
@@ -196,7 +223,7 @@
       },
       {
         "system": false,
-        "id": "if0jlnj1",
+        "id": "ro2wkmaj",
         "name": "date",
         "type": "date",
         "required": true,
@@ -206,33 +233,20 @@
           "min": "",
           "max": ""
         }
-      }
-    ],
-    "indexes": [],
-    "listRule": null,
-    "viewRule": null,
-    "createRule": null,
-    "updateRule": null,
-    "deleteRule": null,
-    "options": {
-      "query": "SELECT Expenses.id, amount, Categories.Descrip AS category, date\nFROM Expenses\nINNER JOIN Categories ON Expenses.category = Categories.id"
-    }
-  },
-  {
-    "id": "85rm166n0ss0qe6",
-    "name": "vExpensesYears",
-    "type": "view",
-    "system": false,
-    "schema": [
+      },
       {
         "system": false,
-        "id": "o4npytbr",
-        "name": "year",
-        "type": "json",
+        "id": "oyw3xr44",
+        "name": "month",
+        "type": "number",
         "required": false,
         "presentable": false,
         "unique": false,
-        "options": {}
+        "options": {
+          "min": null,
+          "max": null,
+          "noDecimal": false
+        }
       }
     ],
     "indexes": [],
@@ -242,7 +256,7 @@
     "updateRule": null,
     "deleteRule": null,
     "options": {
-      "query": "SELECT DISTINCT strftime('%Y', [date]) AS year, 0 as id FROM Expenses;"
+      "query": "SELECT Expenses.id, amount, Categories.Descrip AS category, [date], CAST(strftime('%m', [date]) AS INT) AS month\nFROM Expenses\nINNER JOIN Categories ON Expenses.category = Categories.id\n"
     }
   }
 ]
