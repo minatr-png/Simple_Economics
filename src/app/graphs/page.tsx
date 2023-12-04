@@ -166,6 +166,7 @@ export default function Page() {
 
     const createExpensesTable = (expenses, categories:Array<string>) => {
         // Grouping expenses by month and category
+        let min_expense = 0;
         const groupExpenses = (expenses) => {
             return expenses.reduce((acc, expense) => {
                 const { month, category, amount } = expense;
@@ -175,6 +176,10 @@ export default function Page() {
                     acc[key] = 0;
                 }
         
+                if (amount < min_expense) {
+                    min_expense = amount;
+                }
+
                 acc[key] += amount;
         
                 return acc;
@@ -191,6 +196,8 @@ export default function Page() {
         const thead_row = thead.insertRow();
         thead_row.insertCell();
         
+        //Creating table
+        let min_total_expense = 0, max_total_expense = null;
         const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
         for (let i = 1; i <= 12; i++) {
             const tbody_row = tbody.insertRow();
@@ -198,6 +205,7 @@ export default function Page() {
             const tbody_title_cell = tbody_row.insertCell();
             tbody_title_cell.innerText = months[i-1];
 
+            //Creating category cells
             let row_total = 0;
             categories.forEach(category => {
                 if(i === 1) {
@@ -206,20 +214,60 @@ export default function Page() {
                 }
                 
                 const tbody_cell = tbody_row.insertCell();
-                const current_expense = grouped_expenses[i+'-'+category];
-                if (current_expense) {
-                    tbody_cell.textContent = current_expense + '€';
-                    row_total += current_expense;
-                }
-                else tbody_cell.textContent = '0€';
+                const current_expense = grouped_expenses[i+'-'+category] || 0;
+                tbody_cell.style.background = calculateCellColor(current_expense, min_expense, 0);
+                tbody_cell.textContent = current_expense + '€';
+                row_total += current_expense;
             });
 
+            //Creating total cells
             const tbody_cell = tbody_row.insertCell();
             tbody_cell.textContent = row_total + '€';
+            tbody_cell.setAttribute('value', row_total+'');
+
+            if(row_total < min_total_expense) min_total_expense = row_total;
+            if(row_total > max_total_expense || max_total_expense === null) max_total_expense = row_total;
         }
 
         thead_row.insertCell().innerText = 'Total';
+
+        //Setting conditional formatting for total column
+        tbody.querySelectorAll('td:last-child').forEach((cell:any) => {
+            const cell_value = parseInt(cell.getAttribute('value'))
+            cell.style.background = calculateCellColor(cell_value, min_total_expense, max_total_expense);
+        });
     };
+
+    const calculateCellColor = (value, minValue, maxValue) => {
+        const red = [204, 102, 102];
+        const yellow = [204, 204, 102];
+        const green = [112, 178, 112];
+
+        const ratio = (value - minValue) / (maxValue - minValue);
+        const middleRange = 0.5;
+
+        //Calculate color for the lower half of the values (red to yellow)
+        if (ratio < middleRange) {
+            const lowerRatio = ratio / middleRange;
+            const interpolatedColor = [
+                Math.round((1 - lowerRatio) * red[0] + lowerRatio * yellow[0]),
+                Math.round((1 - lowerRatio) * red[1] + lowerRatio * yellow[1]),
+                Math.round((1 - lowerRatio) * red[2] + lowerRatio * yellow[2]),
+            ];
+            return `rgb(${interpolatedColor.join(',')})`;
+        }
+        
+        //Calculate color for the upper half of the values (yellow to green)
+        const upperRatio = (ratio - middleRange) / (1 - middleRange);
+        const interpolatedColor = [
+            Math.round((1 - upperRatio) * yellow[0] + upperRatio * green[0]),
+            Math.round((1 - upperRatio) * yellow[1] + upperRatio * green[1]),
+            Math.round((1 - upperRatio) * yellow[2] + upperRatio * green[2]),
+        ];
+
+        return `rgb(${interpolatedColor.join(',')})`;
+
+    }
 
     const loadAnnotations = () => {
         db.collection('Annotations').getFullList({ fields:'id, month, annotation', sort: '-month', filter: `year=${current_year}`}).then(res => {
