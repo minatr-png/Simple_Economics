@@ -185,6 +185,9 @@ export default function Page() {
         const thead = document.querySelector('#expensesTable thead') as HTMLTableSectionElement;
         const tbody = document.querySelector('#expensesTable tbody') as HTMLTableSectionElement;
 
+        thead.innerHTML = '';
+        tbody.innerHTML = '';
+
         const thead_row = thead.insertRow();
         thead_row.insertCell();
         
@@ -220,6 +223,8 @@ export default function Page() {
 
     const loadAnnotations = () => {
         db.collection('Annotations').getFullList({ fields:'id, month, annotation', sort: '-month', filter: `year=${current_year}`}).then(res => {
+            document.querySelectorAll('textarea').forEach(text_area => text_area.value = '');
+
             res.forEach(annotation => {
                 const text_area = document.querySelector(`textarea[my-month="${annotation.month}"]`) as HTMLTextAreaElement;
                 text_area.value = annotation.annotation;
@@ -258,8 +263,11 @@ export default function Page() {
     };
 
     const onYearChange = (year) => {
-        current_year = year;
-        loadCharts();
+        if (year !== current_year) {
+            current_year = year;
+            loadCharts();
+            loadAnnotations();
+        }
     };
 
     return (

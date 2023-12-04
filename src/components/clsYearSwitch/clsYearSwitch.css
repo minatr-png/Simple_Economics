@@ -22,10 +22,17 @@
 }
 
 .yearSwitchContainer div.mainSwitchBtn {
-    padding: 4px 20px;
+    height: 38px;
+    border: none;
+    padding: 8px 0;
 }
 
-.yearSwitchContainer div:hover {
+.yearSwitchContainer div.mainSwitchBtn > div:first-child{
+    padding: 4px 20px;
+    margin: 0;
+}
+
+.yearSwitchContainer div:not(.mainSwitchBtn):hover {
     background: white;
     color: #523ab5;
 }
@@ -46,5 +53,6 @@
     margin: 0 0 10px 0;
     opacity: 0;
     padding: 0;
+    background: #503ab6;
     animation: slide 1s ease-in-out calc(0.25s * var(--n)) forwards;
 }

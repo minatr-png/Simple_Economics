@@ -33,15 +33,12 @@ const CLSYearSwitch = ({default_year = new Date().getFullYear(), years = [], onC
         years.forEach((year, i) => {
             let element_div = document.createElement('div');
             element_div.append(year);
-            element_div.style.width = position_data.width + "px";
             element_div.style.setProperty('--n', i);
             element_div.onclick = () => setCurrentYear(year);
             years_container.append(element_div);
         });
 
-        years_container.style.position = 'absolute';
-        years_container.style.top = (position_data.top + position_data.height) + "px";
-        years_container.style.left = position_data.left + "px";
+        years_container.style.position = 'relative';
 
         input.append(years_container);
         document.addEventListener('click', _onOuterClick);
@@ -56,7 +53,7 @@ const CLSYearSwitch = ({default_year = new Date().getFullYear(), years = [], onC
     return (
         <span className="yearSwitchContainer">
             <div onClick={() => modifyCurrentYear(-1)} style={(years[0] === current_year ? {visibility: 'hidden'} : {visibility: 'visible'})}>&lt;</div>
-            <div className="mainSwitchBtn" onClick={ev => showYearsPopup(ev.target)}>{current_year}</div>
+            <div className="mainSwitchBtn" onClick={ev => showYearsPopup(ev.currentTarget   )}><div>{current_year}</div></div>
             <div onClick={() => modifyCurrentYear(1)} style={(this_year === current_year ? {visibility: 'hidden'} : {visibility: 'visible'})}>&gt;</div>
         </span>
     );
