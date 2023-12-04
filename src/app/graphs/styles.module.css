@@ -1,5 +1,5 @@
 /* Header */
-.graphs .header {
+.graphsPage .header {
     height: 15vh;
 
     display: flex;
@@ -7,7 +7,7 @@
     align-items: flex-end;
 }
 
-.graphs .header > div {
+.graphsPage .header > div {
     padding: 2px 10px;
     margin-right: 5px;
     font-size: 30px;
@@ -18,10 +18,76 @@
 }
 
 /* Body */
-.graphs .body {
-    height: 75vh;
+.graphsPage .body {
+    display: flex;
+    height: 85vh;
 }
 
-.graphs .body .graph {
-    width: 33vw;
+.graphsPage .body .graphs {
+    height: 100%;
+    width: 40%;
+}
+
+.graphsPage .body .tables {
+    width: 60%;
+}
+
+.graphsPage .body .graphs canvas, .graphsPage .body .tables > div{
+    padding: 20px;
+}
+
+.graphsPage .body .graphs div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    height: 47%;
+}
+
+.graphsPage .body .graphs div:first-child {
+    height: 53%;
+}
+
+.graphsPage .body table {
+    width: 50%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.graphsPage .body table thead td {
+    white-space: nowrap;
+}
+
+.graphsPage .body  thead, .graphsPage .body  td {
+    border: 1px solid #ddd;
+    padding: 3px;
+    text-align: left;
+}
+
+.graphsPage .body  thead, .graphsPage .body  thead td:first-child {
+    border: none;
+}
+
+.graphsPage table:last-child {
+    width: 90%;
+}
+
+.graphsPage .annotation td:first-child {
+    width: 20%;
+}
+
+.graphsPage .annotation td:last-child {
+    padding: 0;
+}
+
+.graphsPage .annotation td:last-child textarea{
+    resize: none;
+    width: 100%;
+    background: transparent;
+    color: white;
+    border: none;
+}
+
+.graphsPage .annotation td:last-child textarea::-webkit-scrollbar {
+    display: none;
 }

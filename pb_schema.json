@@ -166,16 +166,16 @@
     "type": "view",
     "system": false,
     "schema": [
-        {
-            "system": false,
-            "id": "o4npytbr",
-            "name": "year",
-            "type": "json",
-            "required": false,
-            "presentable": false,
-            "unique": false,
-            "options": {}
-        }
+      {
+        "system": false,
+        "id": "o4npytbr",
+        "name": "year",
+        "type": "json",
+        "required": false,
+        "presentable": false,
+        "unique": false,
+        "options": {}
+      }
     ],
     "indexes": [],
     "listRule": "",
@@ -184,10 +184,10 @@
     "updateRule": null,
     "deleteRule": null,
     "options": {
-        "query": "SELECT DISTINCT strftime('%Y', [date]) AS year, 0 as id FROM Expenses;"
+      "query": "SELECT DISTINCT strftime('%Y', [date]) AS year, 0 as id FROM Expenses;"
     }
-},
-{
+  },
+  {
     "id": "0rp9kmh1gucxt7x",
     "name": "vExpenses",
     "type": "view",
@@ -258,5 +258,62 @@
     "options": {
       "query": "SELECT Expenses.id, amount, Categories.Descrip AS category, [date], CAST(strftime('%m', [date]) AS INT) AS month\nFROM Expenses\nINNER JOIN Categories ON Expenses.category = Categories.id\n"
     }
+  },
+  {
+    "id": "se6tvuz3ri0jlyi",
+    "name": "Annotations",
+    "type": "base",
+    "system": false,
+    "schema": [
+      {
+        "system": false,
+        "id": "qfxz6add",
+        "name": "year",
+        "type": "number",
+        "required": false,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "min": null,
+          "max": null,
+          "noDecimal": false
+        }
+      },
+      {
+        "system": false,
+        "id": "a0wtvpp9",
+        "name": "month",
+        "type": "number",
+        "required": false,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "min": null,
+          "max": null,
+          "noDecimal": false
+        }
+      },
+      {
+        "system": false,
+        "id": "tb22z2ht",
+        "name": "annotation",
+        "type": "text",
+        "required": false,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "min": null,
+          "max": null,
+          "pattern": ""
+        }
+      }
+    ],
+    "indexes": [],
+    "listRule": "",
+    "viewRule": "",
+    "createRule": "",
+    "updateRule": "",
+    "deleteRule": null,
+    "options": {}
   }
 ]

@@ -4,6 +4,8 @@ import CLSYearSwitch from '@clsYearSwitch';
 import styles from  './styles.module.css';
 import PocketBase from 'pocketbase';
 import Chart, { ArcElement } from 'chart.js/auto';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { useEffect, useState } from 'react';
 
 const db = new PocketBase(database_url);
@@ -17,9 +19,12 @@ export default function Page() {
         });
 
         loadCharts();
+
+        loadAnnotations();
     }, []);
 
     const loadCharts = () => {
+        // Generating Expenses chart without values
         let expenses_html =document.getElementById('expensesChart') as HTMLCanvasElement
         if(!expenses_html.getAttribute('loaded')) {
             expenses_ctx = expenses_html.getContext('2d');
@@ -70,7 +75,9 @@ export default function Page() {
             expenses_html.setAttribute('loaded', 'true');
         }
 
-        db.collection('vExpenses').getFullList({fields: 'amount, category, month',filter: `date >= '${current_year}-01-01' && date <= '${current_year}-12-31'`}).then(res => {
+        //Retrieving databse values
+        db.collection('vExpenses').getFullList({fields: 'amount, category, month', sort: 'date',filter: `date >= '${current_year}-01-01' && date <= '${current_year}-12-31'`}).then(res => {
+            //Iterating through databse results
             let expenses = [0,0,0,0,0,0,0,0,0,0,0,0], balance = [0,0,0,0,0,0,0,0,0,0,0,0], categories_data = {};
             res.forEach(expense => {
                 balance[expense.month - 1] += expense.amount;
@@ -78,14 +85,19 @@ export default function Page() {
 
                 if (categories_data[expense.category]) 
                     categories_data[expense.category] += expense.amount;
-                else 
+                else {
                     categories_data[expense.category] = expense.amount;
+                }
             });
 
+            //Update expenses chart
             expenses_chart.data.datasets[0].data = balance;
             expenses_chart.data.datasets[1].data = expenses;
             expenses_chart.update();
 
+            createExpensesTable(res, Object.keys(categories_data));
+
+            //Create categories chart
             let categories_html = document.getElementById('categoriesChart') as HTMLCanvasElement;
             if (categories_html.getAttribute('loaded')) {
                 categories_chart.data.labels = Object.keys(categories_data);
@@ -106,9 +118,7 @@ export default function Page() {
                         plugins: {
                             legend: {
                                 display: true,
-                                labels: {
-                                    color: 'white'
-                                }
+                                labels: { color: 'white' }
                             },
                             tooltip: {
                                 callbacks: {
@@ -121,29 +131,7 @@ export default function Page() {
                             }
                         },
                         animation: {
-                            onComplete: function () {
-                                if ((this.tooltip as any)._active && (this.tooltip as any)._active.length !== 0) return;
-                                const dataset = this.data.datasets[0];
-                                const meta = this.getDatasetMeta(0) as any;
-                                const total = meta.total;
-                                for (let i = 0; i < dataset.data.length; i++) {
-                                    const model = meta.data[i] as ArcElement;
-                                    const mid_radius = model.innerRadius + (model.outerRadius - model.innerRadius) / 2;
-                                    const mid_angle = model.startAngle + (model.endAngle - model.startAngle) / 2;
-                
-                                    const x = mid_radius * Math.cos(mid_angle);
-                                    const y = mid_radius * Math.sin(mid_angle);
-                
-                                    this.ctx.fillStyle = 'black';
-                                
-                                    const percent = Math.round(((dataset.data[i] as number) / total) * 100)+'%';
-                                    const euros_size = this.ctx.measureText(dataset.data[i]+'€');
-                                    const percent_size = this.ctx.measureText(dataset.data[i]+'€');
-
-                                    this.ctx.fillText(dataset.data[i]+'€', model.x + x - (euros_size.width/2), model.y + y);
-                                    this.ctx.fillText(percent, model.x + x - (percent_size.width/2), model.y + y + 15);
-                                }
-                            }
+                            onComplete: function() { return _onComplete(this); }
                         }
                     }
                 });
@@ -152,26 +140,207 @@ export default function Page() {
         });
     }
 
+    const _onComplete = (chart) => {
+        if (chart.tooltip._active && chart.tooltip._active.length !== 0) return;
+            const dataset = chart.data.datasets[0];
+            const meta = chart.getDatasetMeta(0) as any;
+            const total = meta.total;
+            for (let i = 0; i < dataset.data.length; i++) {
+                const model = meta.data[i] as ArcElement;
+                const mid_radius = model.innerRadius + (model.outerRadius - model.innerRadius) / 2;
+                const mid_angle = model.startAngle + (model.endAngle - model.startAngle) / 2;
+
+                const x = mid_radius * Math.cos(mid_angle);
+                const y = mid_radius * Math.sin(mid_angle);
+
+                chart.ctx.fillStyle = 'black';
+            
+                const percent = Math.round(((dataset.data[i] as number) / total) * 100)+'%';
+                const euros_size = chart.ctx.measureText(dataset.data[i]+'€');
+                const percent_size = chart.ctx.measureText(dataset.data[i]+'€');
+
+                chart.ctx.fillText(dataset.data[i]+'€', model.x + x - (euros_size.width/2), model.y + y);
+                chart.ctx.fillText(percent, model.x + x - (percent_size.width/2), model.y + y + 15);
+            }
+    }
+
+    const createExpensesTable = (expenses, categories:Array<string>) => {
+        // Grouping expenses by month and category
+        const groupExpenses = (expenses) => {
+            return expenses.reduce((acc, expense) => {
+                const { month, category, amount } = expense;
+                const key = `${month}-${category}`;
+        
+                if (!acc[key]) {
+                    acc[key] = 0;
+                }
+        
+                acc[key] += amount;
+        
+                return acc;
+            }, {});
+        };
+        
+        const grouped_expenses = groupExpenses(expenses);
+        const thead = document.querySelector('#expensesTable thead') as HTMLTableSectionElement;
+        const tbody = document.querySelector('#expensesTable tbody') as HTMLTableSectionElement;
+
+        const thead_row = thead.insertRow();
+        thead_row.insertCell();
+        
+        const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+        for (let i = 1; i <= 12; i++) {
+            const tbody_row = tbody.insertRow();
+
+            const tbody_title_cell = tbody_row.insertCell();
+            tbody_title_cell.innerText = months[i-1];
+
+            let row_total = 0;
+            categories.forEach(category => {
+                if(i === 1) {
+                    const thead_cell = thead_row.insertCell();
+                    thead_cell.textContent = category;
+                }
+                
+                const tbody_cell = tbody_row.insertCell();
+                const current_expense = grouped_expenses[i+'-'+category];
+                if (current_expense) {
+                    tbody_cell.textContent = current_expense + '€';
+                    row_total += current_expense;
+                }
+                else tbody_cell.textContent = '0€';
+            });
+
+            const tbody_cell = tbody_row.insertCell();
+            tbody_cell.textContent = row_total + '€';
+        }
+
+        thead_row.insertCell().innerText = 'Total';
+    };
+
+    const loadAnnotations = () => {
+        db.collection('Annotations').getFullList({ fields:'id, month, annotation', sort: '-month', filter: `year=${current_year}`}).then(res => {
+            res.forEach(annotation => {
+                const text_area = document.querySelector(`textarea[my-month="${annotation.month}"]`) as HTMLTextAreaElement;
+                text_area.value = annotation.annotation;
+                text_area.setAttribute('registerId', annotation.id);
+            });
+        });
+    };
+
+    const onAnnotationChange = (ev) => {
+        let text_area = ev.target as HTMLTextAreaElement;
+
+        const data = {
+            year: current_year,
+            month: parseInt(text_area.getAttribute('my-month')),
+            annotation: text_area.value
+        };
+
+        const register_id = text_area.getAttribute('registerId');
+        if (register_id) {
+            db.collection('Annotations').update(register_id, data).then( rec => {
+                toast.success('Anotación actualizada', {
+                    position: 'bottom-right',
+                    autoClose: 1700
+                });
+            });
+        } else {
+            db.collection('Annotations').create(data).then( rec => {
+                toast.success('Anotación actualizada', {
+                    position: 'bottom-right',
+                    autoClose: 1700
+                });
+
+                text_area.setAttribute('registerId', rec.id);
+            });
+        }
+    };
+
     const onYearChange = (year) => {
         current_year = year;
         loadCharts();
     };
 
     return (
-        <div id="moduleContainer" className={styles.graphs + " bg-economics"}>
+        <div id="moduleContainer" className={styles.graphsPage + " bg-economics"}>
+            <ToastContainer />
             <div className={styles.header}>
                 <CLSYearSwitch default_year={current_year} years={years} onChange={year => onYearChange(year)}></CLSYearSwitch>
             </div>
             <div className={styles.body}>
-                <div className={styles.graph}>
+                <div className={styles.graphs}>
+                    <div>
+                        <canvas id='categoriesChart'></canvas>
+                    </div>
                     <div>
                         <canvas id='expensesChart'></canvas>
                     </div>
                 </div>
-                <div className={styles.graph}>
-                    <div>
-                        <canvas id='categoriesChart'></canvas>
-                    </div>
+                <div className={styles.tables}>
+                    <table id="expensesTable">
+                       <thead></thead>
+                       <tbody></tbody>
+                    </table>
+
+                    <table id="annotationsTable">
+                       <thead>
+                            <tr>
+                                <td></td>
+                                <td>Anotaciones</td>
+                            </tr>
+                       </thead>
+                       <tbody>
+                            <tr className={styles.annotation}> 
+                                <td>Enero</td> 
+                                <td> <textarea rows={1} my-month="1" onBlur={ev => onAnnotationChange(ev)}></textarea> </td> 
+                            </tr>
+                            <tr className={styles.annotation}> 
+                                <td>Febrero</td> 
+                                <td> <textarea rows={1} my-month="2" onBlur={ev => onAnnotationChange(ev)}></textarea> </td> 
+                            </tr>
+                            <tr className={styles.annotation}> 
+                                <td>Marzo</td> 
+                                <td> <textarea rows={1} my-month="3" onBlur={ev => onAnnotationChange(ev)}></textarea> </td> 
+                            </tr>
+                            <tr className={styles.annotation}> 
+                                <td>Abril</td> 
+                                <td> <textarea rows={1} my-month="4" onBlur={ev => onAnnotationChange(ev)}></textarea> </td> 
+                            </tr>
+                            <tr className={styles.annotation}> 
+                                <td>Mayo</td> 
+                                <td> <textarea rows={1} my-month="5" onBlur={ev => onAnnotationChange(ev)}></textarea> </td> 
+                            </tr>
+                            <tr className={styles.annotation}> 
+                                <td>Junio</td> 
+                                <td> <textarea rows={1} my-month="6" onBlur={ev => onAnnotationChange(ev)}></textarea> </td> 
+                            </tr>
+                            <tr className={styles.annotation}> 
+                                <td>Julio</td> 
+                                <td> <textarea rows={1} my-month="7" onBlur={ev => onAnnotationChange(ev)}></textarea> </td> 
+                            </tr>
+                            <tr className={styles.annotation}> 
+                                <td>Agosto</td> 
+                                <td> <textarea rows={1} my-month="8" onBlur={ev => onAnnotationChange(ev)}></textarea> </td> 
+                            </tr>
+                            <tr className={styles.annotation}> 
+                                <td>Septiembre</td> 
+                                <td> <textarea rows={1} my-month="9" onBlur={ev => onAnnotationChange(ev)}></textarea> </td> 
+                            </tr>
+                            <tr className={styles.annotation}> 
+                                <td>Octubre</td> 
+                                <td> <textarea rows={1} my-month="10" onBlur={ev => onAnnotationChange(ev)}></textarea> </td> 
+                            </tr>
+                            <tr className={styles.annotation}> 
+                                <td>Noviembre</td> 
+                                <td> <textarea rows={1} my-month="11" onBlur={ev => onAnnotationChange(ev)}></textarea> </td> 
+                            </tr>
+                            <tr className={styles.annotation}> 
+                                <td>Diciembre</td> 
+                                <td> <textarea rows={1} my-month="12" onBlur={ev => onAnnotationChange(ev)}></textarea> </td> 
+                            </tr>
+                       </tbody>
+                    </table>
                 </div>
             </div>
         </div>

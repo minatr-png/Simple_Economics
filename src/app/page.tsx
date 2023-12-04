@@ -30,15 +30,14 @@ export default function Page() {
     const getCurrentDate = () => {
         const currentDate = new Date();
         const year = currentDate.getFullYear();
-        const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Month is zero-based
-        const day = String(currentDate.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
+        const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+        return `${year}-${month}`;
     }
     
     const submitExpense = () => {
         let category, date;
         category = document.getElementById('categoryInput').getAttribute('realvalue');
-        date = (document.getElementById('dateInput') as HTMLInputElement).value;
+        date = (document.getElementById('dateInput') as HTMLInputElement).value + '-01';
  
         if (category && date && amount) {
             const data = {
@@ -75,7 +74,7 @@ export default function Page() {
                 </div>
                 <div>
                     <span>Fecha</span>
-                    <input id="dateInput" type="date" defaultValue={getCurrentDate()} onKeyUp={(ev) => onEnterPress(ev, 3, true)} required tabIndex={3}></input>
+                    <input id="dateInput" type="month" defaultValue={getCurrentDate()} onKeyUp={(ev) => onEnterPress(ev, 3, true)} required tabIndex={3}></input>
                 </div>
             </AddRecordLayout>
             <NavButtonsLayout>

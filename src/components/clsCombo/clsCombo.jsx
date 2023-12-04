@@ -58,6 +58,7 @@ const CLSCombo = ({ data, value_field, descrip_field, tabIndex = "", id, onKeyUp
 
     //Filter input
     let filter_input = document.createElement('input');
+    filter_input.tabIndex = tabIndex;
     filter_input.onblur = () => combo_div.remove();
     filter_input.onkeydown = ev => _onKeyDown(ev);
     filter_input.onkeyup = ev => _onKeyUp(ev);
