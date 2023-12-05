@@ -13,7 +13,7 @@ const CLSCombo = ({ data, value_field, descrip_field, tabIndex = "", id, onKeyUp
     }
 
     return next_element;
-  }
+  };
 
   const getPreviousElement = (start_element) => {
     let previous_element = start_element;
@@ -26,7 +26,7 @@ const CLSCombo = ({ data, value_field, descrip_field, tabIndex = "", id, onKeyUp
     }
 
     return previous_element;
-  }
+  };
 
   const selectElement = (ev) => {
     let current_selection = combo_div.querySelector('.selected');
@@ -49,7 +49,7 @@ const CLSCombo = ({ data, value_field, descrip_field, tabIndex = "", id, onKeyUp
 
       value_input.dispatchEvent(enter_key_event);
     }
-  }
+  };
 
   let combo_div;
   const _onFocus = (ev) => {
@@ -59,7 +59,6 @@ const CLSCombo = ({ data, value_field, descrip_field, tabIndex = "", id, onKeyUp
     //Filter input
     let filter_input = document.createElement('input');
     filter_input.tabIndex = tabIndex;
-    filter_input.onblur = () => combo_div.remove();
     filter_input.onkeydown = ev => _onKeyDown(ev);
     filter_input.onkeyup = ev => _onKeyUp(ev);
     filter_input.oninput = ev => _onInput(ev);
@@ -87,7 +86,21 @@ const CLSCombo = ({ data, value_field, descrip_field, tabIndex = "", id, onKeyUp
     document.body.append(combo_div);
     combo_div.classList.add('visible');
     filter_input.focus();
-  }
+
+    const _onResize = () => {
+      const position_data = ev.target.getBoundingClientRect();
+      combo_div.style.left = position_data.left + "px";
+      combo_div.style.top = position_data.bottom + "px";
+
+      console.log('Hola')
+    };
+
+    filter_input.onblur = () => {
+      combo_div.remove();
+      window.removeEventListener('resize', _onResize);
+    };
+    window.addEventListener('resize', _onResize);
+  };
 
   const _onMouseOver = (ev) => {
     let current_selection = combo_div.querySelector('.selected');

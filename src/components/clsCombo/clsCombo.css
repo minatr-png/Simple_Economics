@@ -3,6 +3,9 @@
     background: linear-gradient(90deg, #864BA2, #5a4ba2);
     padding: 10px;
     border: var(--main-border);
+
+    overflow-y: scroll;
+    height: 40%;
 }
 
 #comboData input {

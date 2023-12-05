@@ -53,7 +53,7 @@ const CLSYearSwitch = ({default_year = new Date().getFullYear(), years = [], onC
     return (
         <span className="yearSwitchContainer">
             <div onClick={() => modifyCurrentYear(-1)} style={(years[0] === current_year ? {visibility: 'hidden'} : {visibility: 'visible'})}>&lt;</div>
-            <div className="mainSwitchBtn" onClick={ev => showYearsPopup(ev.currentTarget   )}><div>{current_year}</div></div>
+            <div className="mainSwitchBtn" onClick={ev => showYearsPopup(ev.currentTarget)}><div>{current_year}</div></div>
             <div onClick={() => modifyCurrentYear(1)} style={(this_year === current_year ? {visibility: 'hidden'} : {visibility: 'visible'})}>&gt;</div>
         </span>
     );

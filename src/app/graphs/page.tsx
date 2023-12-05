@@ -187,14 +187,14 @@ export default function Page() {
         };
         
         const grouped_expenses = groupExpenses(expenses);
-        const thead = document.querySelector('#expensesTable thead') as HTMLTableSectionElement;
+        //const thead = document.querySelector('#expensesTable thead') as HTMLTableSectionElement;
         const tbody = document.querySelector('#expensesTable tbody') as HTMLTableSectionElement;
 
-        thead.innerHTML = '';
+        //thead.innerHTML = '';
         tbody.innerHTML = '';
 
-        const thead_row = thead.insertRow();
-        thead_row.insertCell();
+        const header_row = tbody.insertRow();
+        header_row.insertCell();
         
         //Creating table
         let min_total_expense = 0, max_total_expense = null;
@@ -209,7 +209,7 @@ export default function Page() {
             let row_total = 0;
             categories.forEach(category => {
                 if(i === 1) {
-                    const thead_cell = thead_row.insertCell();
+                    const thead_cell = header_row.insertCell();
                     thead_cell.textContent = category;
                 }
                 
@@ -229,7 +229,7 @@ export default function Page() {
             if(row_total > max_total_expense || max_total_expense === null) max_total_expense = row_total;
         }
 
-        thead_row.insertCell().innerText = 'Total';
+        header_row.insertCell().innerText = 'Total';
 
         //Setting conditional formatting for total column
         tbody.querySelectorAll('td:last-child').forEach((cell:any) => {
@@ -334,8 +334,7 @@ export default function Page() {
                     </div>
                 </div>
                 <div className={styles.tables}>
-                    <table id="expensesTable">
-                       <thead></thead>
+                    <table className={styles.expensesTable} id="expensesTable">
                        <tbody></tbody>
                     </table>
 

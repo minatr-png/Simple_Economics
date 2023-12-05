@@ -49,7 +49,6 @@
 }
 
 .graphsPage .body table {
-    width: 50%;
     border-collapse: collapse;
     margin-top: 20px;
 }
@@ -68,7 +67,7 @@
     border: none;
 }
 
-.graphsPage table:last-child {
+.graphsPage table {
     width: 90%;
 }
 
@@ -101,4 +100,39 @@
 
 .graphsPage .annotation td:last-child textarea::-webkit-scrollbar {
     display: none;
+}
+
+.expensesTable {
+    overflow-x: auto;
+    display: block;
+}
+
+.expensesTable::-webkit-scrollbar {
+    display: none;
+}
+
+.expensesTable {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.expensesTable td {
+    white-space: nowrap;
+}
+
+.expensesTable tr:first-child td {
+    background-color: #8768bd;
+}
+
+.expensesTable tbody td:first-child,
+.expensesTable tbody td:last-child {
+    position: sticky;
+    left: 0;
+
+    background-color: #8768bd;
+}
+
+.expensesTable tbody td:last-child {
+    right: 0;
+    left: auto;
 }
