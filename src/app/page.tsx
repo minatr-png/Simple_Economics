@@ -2,7 +2,7 @@
 import { database_url } from '@clsGlobals';
 import PocketBase from 'pocketbase';
 import styles from  './styles.module.css';
-import CurrencyInput  from 'react-currency-input-field';
+import CurrencyInput, { formatValue } from 'react-currency-input-field';
 import CLSNavButton from '@clsNavButton';
 import CLSCombo from '@clsCombo';
 import { ToastContainer, toast } from 'react-toastify';
@@ -15,11 +15,15 @@ export default function Page() {
     
     const db = new PocketBase(database_url);
 
-    let [data, setData] = useState([]);
+    let [total_money_value, setTotalMoneyValue] = useState(0);
+    let [total_money, setTotalMoney] = useState('0');
+    let [categoryData, setCategoryData] = useState([]);
     useEffect(() => {
         db.collection('categories').getFullList({ fields: 'id, descrip', sort: 'order' }).then((res) => {
-            setData(res);
+            setCategoryData([{descrip: '-', id: null}, ...res]);
         });
+
+        db.collection('vTotalMoney').getOne('0', {fields: 'totalMoney'}).then(res => setTotal(res.totalMoney));
     }, []);
 
     let amount;
@@ -39,25 +43,42 @@ export default function Page() {
         category = document.getElementById('categoryInput').getAttribute('realvalue');
         date = (document.getElementById('dateInput') as HTMLInputElement).value + '-01';
  
-        if (category && date && amount) {
-            const data = {
-                "amount": amount,
-                "category": category,
-                "date": date
-            };
-
-            db.collection('Expenses').create(data).then( rec => {
-                toast.success('Gasto añadido', {
-                    position: 'bottom-right',
-                    autoClose: 1700
-                });
-            });
-        } else {
-            toast.error('Faltan campos por rellenar', {
+        const error_message = checkSubmissionValues(date, amount, category);
+        if (error_message) {
+            toast.error(error_message, {
                 position: 'bottom-right',
                 autoClose: 1700
             });
+            return;
         }
+
+        const data = {
+            "amount": amount.replace(',', '.'),
+            "category": category,
+            "date": date
+        };
+
+        db.collection('Expenses').create(data).then( rec => {
+            setTotal(total_money_value + rec.amount);
+            toast.success('Gasto añadido', {
+                position: 'bottom-right',
+                autoClose: 1700
+            });
+        });
+    }
+
+    const checkSubmissionValues = (date, amount, category) => {
+        if (!date || !amount) return 'Faltan campos por rellenar';
+
+        if (category) return amount > 0 ? 'No se admite categoría al agregar ingresos' : null; 
+
+        return  amount < 0 ? 'Faltan campos por rellenar' : null;
+    }
+
+    const setTotal = (new_total) => {
+        setTotalMoneyValue(new_total);
+        const value = formatValue({value: new_total+'', groupSeparator: '.', decimalSeparator: ','});
+        setTotalMoney(value);
     }
 
     return (
@@ -70,7 +91,7 @@ export default function Page() {
                 </div>
                 <div>
                     <span>Categoría</span>
-                    <CLSCombo id="categoryInput" data={data} descrip_field="descrip" value_field="id" tabIndex="2" onKeyUp={ev => onEnterPress(ev, 2)}></CLSCombo>
+                    <CLSCombo id="categoryInput" data={categoryData} descrip_field="descrip" value_field="id" tabIndex="2" onKeyUp={ev => onEnterPress(ev, 2)}></CLSCombo>
                 </div>
                 <div>
                     <span>Fecha</span>
@@ -82,6 +103,7 @@ export default function Page() {
                 <CLSNavButton title="Gastos" route="/expenses"></CLSNavButton>
                 <CLSNavButton title="Añadir categoría" route="/categories"></CLSNavButton>
                 <ToastContainer />
+                <div className={styles.totalMoney} id="totalMoney"><span>Total: </span> {total_money}€</div>
             </NavButtonsLayout>
         </div>
     );

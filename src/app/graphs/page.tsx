@@ -35,12 +35,14 @@ export default function Page() {
                         type: 'bar',
                         label: 'Balance',
                         data: [0,0,0,0,0,0,0,0,0,0,0,0],
-                        borderWidth: 1
+                        borderWidth: 1,
+                        order: 2
                     }, {
                         label: 'Gastos',
                         data: [0,0,0,0,0,0,0,0,0,0,0,0],
                         type: 'line',
-                        borderWidth: 1
+                        borderWidth: 1,
+                        order: 1
                     }]
                 },
                 options: {
@@ -81,12 +83,14 @@ export default function Page() {
             let expenses = [0,0,0,0,0,0,0,0,0,0,0,0], balance = [0,0,0,0,0,0,0,0,0,0,0,0], categories_data = {};
             res.forEach(expense => {
                 balance[expense.month - 1] += expense.amount;
-                if (expense.amount < 0) expenses[expense.month - 1] -= expense.amount;
+                if (expense.category) {
+                    expenses[expense.month - 1] -= expense.amount;
 
-                if (categories_data[expense.category]) 
-                    categories_data[expense.category] += expense.amount;
-                else {
-                    categories_data[expense.category] = expense.amount;
+                    if (categories_data[expense.category]) 
+                        categories_data[expense.category] += expense.amount;
+                    else {
+                        categories_data[expense.category] = expense.amount;
+                    }
                 }
             });
 

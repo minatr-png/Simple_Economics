@@ -29,6 +29,8 @@
 }
 
 .graphsPage .body .tables {
+    display: flex;
+    flex-direction: column;
     width: 60%;
 }
 
@@ -49,8 +51,10 @@
 }
 
 .graphsPage .body table {
-    border-collapse: collapse;
+    width: 90%;
     margin-top: 20px;
+
+    border-collapse: collapse;
 }
 
 .graphsPage .body table thead td {
@@ -65,10 +69,6 @@
 
 .graphsPage .body  thead, .graphsPage .body  thead td:first-child {
     border: none;
-}
-
-.graphsPage table {
-    width: 90%;
 }
 
 .graphsPage .annotation td:first-child {
@@ -102,6 +102,7 @@
     display: none;
 }
 
+/* Expeses table */
 .expensesTable {
     overflow-x: auto;
     display: block;

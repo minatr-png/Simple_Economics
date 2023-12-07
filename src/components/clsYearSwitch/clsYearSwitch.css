@@ -47,6 +47,7 @@
     padding-right: 5px;
 
     overflow-y: auto;
+    z-index: 1;
 }
 
 .yearsContainer div {

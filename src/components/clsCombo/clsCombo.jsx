@@ -68,7 +68,7 @@ const CLSCombo = ({ data, value_field, descrip_field, tabIndex = "", id, onKeyUp
     data.forEach((el, index) => {
       let element_div = document.createElement('div');
       element_div.setAttribute('order', index);
-      element_div.setAttribute('value', el[value_field]);
+      element_div.setAttribute('value', el[value_field] || "");
       element_div.append(el[descrip_field]);
       element_div.onmousedown = ev => selectElement(ev);
       element_div.onmouseover = ev => _onMouseOver(ev);
@@ -91,8 +91,6 @@ const CLSCombo = ({ data, value_field, descrip_field, tabIndex = "", id, onKeyUp
       const position_data = ev.target.getBoundingClientRect();
       combo_div.style.left = position_data.left + "px";
       combo_div.style.top = position_data.bottom + "px";
-
-      console.log('Hola')
     };
 
     filter_input.onblur = () => {
@@ -137,15 +135,25 @@ const CLSCombo = ({ data, value_field, descrip_field, tabIndex = "", id, onKeyUp
   const _onInput = (ev) => {
     let any_value = false;
     data.forEach(el => {
-      let element_div = combo_div.querySelector(`[value="${el[value_field]}"]`);
-      let current_value = ev.target.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");   //Normalize and replace to avoid missmatches with accents
-      let element_value = el[descrip_field].toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      let element_div;
+      let current_value = ev.target.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); //Replace is used to normalize and replace to avoid missmatches with accents
+      if (el[value_field]) {
+        element_div = combo_div.querySelector(`[value="${el[value_field]}"]`);
+        let element_value = el[descrip_field].toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
-      if (element_value.includes(current_value)) {
-        any_value = true;
-        element_div.style.display = 'block';
+        if (element_value.includes(current_value)) {
+          any_value = true;
+          element_div.style.display = 'block';
+        } else {
+          element_div.style.display = 'none';
+        }
       } else {
-        element_div.style.display = 'none';
+        element_div = combo_div.querySelector('div[order="0"]');
+        if (current_value) {
+          element_div.style.display = 'none';
+        } else {
+          element_div.style.display = 'block';
+        }
       }
     });
 

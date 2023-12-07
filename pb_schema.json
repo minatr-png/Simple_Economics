@@ -188,78 +188,6 @@
     }
   },
   {
-    "id": "0rp9kmh1gucxt7x",
-    "name": "vExpenses",
-    "type": "view",
-    "system": false,
-    "schema": [
-      {
-        "system": false,
-        "id": "mjjnk11e",
-        "name": "amount",
-        "type": "number",
-        "required": true,
-        "presentable": false,
-        "unique": false,
-        "options": {
-          "min": null,
-          "max": null,
-          "noDecimal": false
-        }
-      },
-      {
-        "system": false,
-        "id": "vtznel7b",
-        "name": "category",
-        "type": "text",
-        "required": true,
-        "presentable": false,
-        "unique": false,
-        "options": {
-          "min": null,
-          "max": null,
-          "pattern": ""
-        }
-      },
-      {
-        "system": false,
-        "id": "ro2wkmaj",
-        "name": "date",
-        "type": "date",
-        "required": true,
-        "presentable": false,
-        "unique": false,
-        "options": {
-          "min": "",
-          "max": ""
-        }
-      },
-      {
-        "system": false,
-        "id": "oyw3xr44",
-        "name": "month",
-        "type": "number",
-        "required": false,
-        "presentable": false,
-        "unique": false,
-        "options": {
-          "min": null,
-          "max": null,
-          "noDecimal": false
-        }
-      }
-    ],
-    "indexes": [],
-    "listRule": "",
-    "viewRule": "",
-    "createRule": null,
-    "updateRule": null,
-    "deleteRule": null,
-    "options": {
-      "query": "SELECT Expenses.id, amount, Categories.Descrip AS category, [date], CAST(strftime('%m', [date]) AS INT) AS month\nFROM Expenses\nINNER JOIN Categories ON Expenses.category = Categories.id\n"
-    }
-  },
-  {
     "id": "se6tvuz3ri0jlyi",
     "name": "Annotations",
     "type": "base",
@@ -315,5 +243,104 @@
     "updateRule": "",
     "deleteRule": null,
     "options": {}
+  },
+  {
+    "id": "0rp9kmh1gucxt7x",
+    "name": "vExpenses",
+    "type": "view",
+    "system": false,
+    "schema": [
+      {
+        "system": false,
+        "id": "aadx7x5l",
+        "name": "amount",
+        "type": "number",
+        "required": true,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "min": null,
+          "max": null,
+          "noDecimal": false
+        }
+      },
+      {
+        "system": false,
+        "id": "gixzvvdv",
+        "name": "category",
+        "type": "text",
+        "required": true,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "min": null,
+          "max": null,
+          "pattern": ""
+        }
+      },
+      {
+        "system": false,
+        "id": "xcvriviw",
+        "name": "date",
+        "type": "date",
+        "required": true,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "min": "",
+          "max": ""
+        }
+      },
+      {
+        "system": false,
+        "id": "4fkiykqs",
+        "name": "month",
+        "type": "number",
+        "required": false,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "min": null,
+          "max": null,
+          "noDecimal": false
+        }
+      }
+    ],
+    "indexes": [],
+    "listRule": "",
+    "viewRule": "",
+    "createRule": null,
+    "updateRule": null,
+    "deleteRule": null,
+    "options": {
+      "query": "SELECT Expenses.id, amount, Categories.Descrip AS category, [date], CAST(strftime('%m', [date]) AS INT) AS month\nFROM Expenses\nLEFT JOIN Categories ON Expenses.category = Categories.id\n"
+    }
+  },
+  {
+    "id": "q8lq0u6sqpybhxa",
+    "name": "vTotalMoney",
+    "type": "view",
+    "system": false,
+    "schema": [
+      {
+        "system": false,
+        "id": "h1hysxqx",
+        "name": "totalMoney",
+        "type": "json",
+        "required": false,
+        "presentable": false,
+        "unique": false,
+        "options": {}
+      }
+    ],
+    "indexes": [],
+    "listRule": null,
+    "viewRule": "",
+    "createRule": null,
+    "updateRule": null,
+    "deleteRule": null,
+    "options": {
+      "query": "SELECT 0 AS id, SUM(amount) as totalMoney FROM Expenses"
+    }
   }
 ]

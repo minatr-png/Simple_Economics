@@ -4,8 +4,8 @@
     padding: 10px;
     border: var(--main-border);
 
-    overflow-y: scroll;
-    height: 40%;
+    overflow-y: auto;
+    max-height: 40%;
 }
 
 #comboData input {
