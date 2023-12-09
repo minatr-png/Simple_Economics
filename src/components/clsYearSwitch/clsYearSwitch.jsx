@@ -17,43 +17,41 @@ const CLSYearSwitch = ({default_year = new Date().getFullYear(), years = [], onC
     };
 
     const showYearsPopup = (input) => {
-        if (years.length === 0) return;
+        let years_container = document.querySelector(".yearsContainer");
         
-        let current_years_container = document.querySelector('.yearsContainer');
-        if(current_years_container) {
-            current_years_container.remove();
-            return;
-        }
+        //Show combo element
+        years_container.style.display = 'block';
+        years_container.classList.add('slideAnimation');
 
-        let years_container = document.createElement('span');
-        years_container.classList.add('yearsContainer');
-
-        const position_data = input.getBoundingClientRect();
-
-        years.forEach((year, i) => {
-            let element_div = document.createElement('div');
-            element_div.append(year);
-            element_div.style.setProperty('--n', i);
-            element_div.onclick = () => setCurrentYear(year);
-            years_container.append(element_div);
-        });
-
-        years_container.style.position = 'relative';
-
-        input.append(years_container);
         document.addEventListener('click', _onOuterClick);
     };
 
     const _onOuterClick = () => {
-        let current_years_container = document.querySelector('.yearsContainer');
-        if(current_years_container) current_years_container.remove();
+        let years_container = document.querySelector('.yearsContainer');
+        years_container.classList.remove('slideAnimation');
+        years_container.style.display= 'none';
         document.removeEventListener('click', _onOuterClick);
-    }
+    };
+
+    const getYearElement = ({year, index}) => {
+        return (
+          <div key={index} onClick={() => setCurrentYear(year)} style={{"--n": index}}>
+            {year}
+          </div>
+        );
+    };
+    
+    const years_elements = years.map((year, i) => {
+        return getYearElement({index: i, year: year});
+    });
 
     return (
         <span className="yearSwitchContainer">
             <div onClick={() => modifyCurrentYear(-1)} style={(years[0] === current_year ? {visibility: 'hidden'} : {visibility: 'visible'})}>&lt;</div>
-            <div className="mainSwitchBtn" onClick={ev => showYearsPopup(ev.currentTarget)}><div>{current_year}</div></div>
+            <div className="mainSwitchBtn" onClick={ev => showYearsPopup(ev.currentTarget)}>
+                <div>{current_year}</div>
+                <span className="yearsContainer">{years_elements}</span>
+            </div>
             <div onClick={() => modifyCurrentYear(1)} style={(this_year === current_year ? {visibility: 'hidden'} : {visibility: 'visible'})}>&gt;</div>
         </span>
     );

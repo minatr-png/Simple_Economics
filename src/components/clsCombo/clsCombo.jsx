@@ -156,7 +156,8 @@ const CLSCombo = ({ data, value_field, descrip_field, tabIndex = "", id, onKeyUp
 
   const combo_data = data.map((el, i) => {
     return getComboElement({index: i, value: el[value_field], description: el[descrip_field]});
-  })
+  });
+  
   return (
     <>
       <input id={id} onFocus={ev => _onFocus(ev)} onKeyUp={ev => onKeyUp(ev)} tabIndex={tabIndex}></input>

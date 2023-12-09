@@ -43,11 +43,15 @@
 
 /*Loaded Years*/
 .yearsContainer {
+    position: relative;
+
     height: 50vh;
     padding-right: 5px;
 
     overflow-y: auto;
     z-index: 1;
+
+    opacity: 0;
 }
 
 .yearsContainer div {
