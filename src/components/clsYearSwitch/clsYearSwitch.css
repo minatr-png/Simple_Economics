@@ -55,5 +55,5 @@
     opacity: 0;
     padding: 0;
     background: #503ab6;
-    animation: slide 1s ease-in-out calc(0.25s * var(--n)) forwards;
+    animation: slide 0.75s ease-in-out calc(0.25s * var(--n)) forwards;
 }

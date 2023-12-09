@@ -1,4 +1,5 @@
 import './clsCombo.css';
+import { BounceLoader } from 'react-spinners';
 
 const CLSCombo = ({ data, value_field, descrip_field, tabIndex = "", id, onKeyUp }) => {
 
@@ -29,7 +30,7 @@ const CLSCombo = ({ data, value_field, descrip_field, tabIndex = "", id, onKeyUp
   };
 
   const selectElement = (ev) => {
-    let current_selection = combo_div.querySelector('.selected');
+    let current_selection = document.querySelector('#comboData .selected');
     if (current_selection) {
       let value_input = document.getElementById(id);
       value_input.value = current_selection.innerHTML;
@@ -45,63 +46,44 @@ const CLSCombo = ({ data, value_field, descrip_field, tabIndex = "", id, onKeyUp
         cancelable: true,
         shiftKey: ev.shiftKey
       });
-      combo_div.style.display = 'none';
 
       value_input.dispatchEvent(enter_key_event);
     }
   };
 
-  let combo_div;
   const _onFocus = (ev) => {
-    combo_div = document.createElement('div');
-    combo_div.id = 'comboData';
-
-    //Filter input
-    let filter_input = document.createElement('input');
-    filter_input.tabIndex = tabIndex;
-    filter_input.onkeydown = ev => _onKeyDown(ev);
-    filter_input.onkeyup = ev => _onKeyUp(ev);
-    filter_input.oninput = ev => _onInput(ev);
-    combo_div.append(filter_input);
-
-    //Add data element
-    data.forEach((el, index) => {
-      let element_div = document.createElement('div');
-      element_div.setAttribute('order', index);
-      element_div.setAttribute('value', el[value_field] || "");
-      element_div.append(el[descrip_field]);
-      element_div.onmousedown = ev => selectElement(ev);
-      element_div.onmouseover = ev => _onMouseOver(ev);
-      element_div.onmouseout = ev => _onMouseOut(ev);
-      combo_div.append(element_div);
-    });
+    let combo_element = document.getElementById('comboData');
 
     //Set position and width
-    const position_data = ev.target.getBoundingClientRect();
-    combo_div.style.position = 'absolute';
-    combo_div.style.top = (position_data.top + position_data.height + 10) + "px";
-    combo_div.style.left = position_data.left + "px";
-    combo_div.style.width = position_data.width + "px";
+    const parent_element = ev.target.parentElement;
+    combo_element.style.top = parent_element.clientHeight + 10 + "px";
+    combo_element.style.left = parent_element.querySelector('span').clientWidth + "px";
+    combo_element.style.width = parent_element.querySelector('input').clientWidth - 20+ "px"; //-20 to balance with the padding
 
-    document.body.append(combo_div);
-    combo_div.classList.add('visible');
+    //Show combo element
+    combo_element.style.display = 'block';
+    combo_element.classList.add('slideAnimation');
+
+    //Filter input
+    let filter_input = combo_element.getElementsByTagName('input')[0];
     filter_input.focus();
 
     const _onResize = () => {
       const position_data = ev.target.getBoundingClientRect();
-      combo_div.style.left = position_data.left + "px";
-      combo_div.style.top = position_data.bottom + "px";
+      combo_element.style.left = position_data.left + "px";
+      combo_element.style.top = position_data.bottom + "px";
     };
 
     filter_input.onblur = () => {
-      combo_div.remove();
+      combo_element.classList.remove('slideAnimation');
+      combo_element.style.display= 'none';
       window.removeEventListener('resize', _onResize);
     };
     window.addEventListener('resize', _onResize);
   };
 
   const _onMouseOver = (ev) => {
-    let current_selection = combo_div.querySelector('.selected');
+    let current_selection = document.querySelector('#comboData .selected');
     if (current_selection) current_selection.classList.remove('selected');
     ev.target.classList.add('selected');
   }
@@ -112,7 +94,7 @@ const CLSCombo = ({ data, value_field, descrip_field, tabIndex = "", id, onKeyUp
 
   const _onKeyDown = (ev) => {
     if (ev.key === 'ArrowUp' || ev.key === 'ArrowDown') {
-      let current_selection = combo_div.querySelector('.selected');
+      let current_selection = document.querySelector('#comboData .selected');
       if (current_selection) {
         let new_selection = ev.key === 'ArrowUp' ? getPreviousElement(current_selection) : getNextElement(current_selection);
 
@@ -121,7 +103,7 @@ const CLSCombo = ({ data, value_field, descrip_field, tabIndex = "", id, onKeyUp
           new_selection.classList.add('selected');
         }
       }
-      else combo_div.querySelector(`[order="0"]`).classList.add('selected');
+      else document.querySelector(`#comboData [order="0"]`).classList.add('selected');
 
     }
   }
@@ -138,7 +120,7 @@ const CLSCombo = ({ data, value_field, descrip_field, tabIndex = "", id, onKeyUp
       let element_div;
       let current_value = ev.target.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); //Replace is used to normalize and replace to avoid missmatches with accents
       if (el[value_field]) {
-        element_div = combo_div.querySelector(`[value="${el[value_field]}"]`);
+        element_div = document.querySelector(`#comboData [value="${el[value_field]}"]`);
         let element_value = el[descrip_field].toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
         if (element_value.includes(current_value)) {
@@ -148,7 +130,7 @@ const CLSCombo = ({ data, value_field, descrip_field, tabIndex = "", id, onKeyUp
           element_div.style.display = 'none';
         }
       } else {
-        element_div = combo_div.querySelector('div[order="0"]');
+        element_div = document.querySelector('#comboData div[order="0"]');
         if (current_value) {
           element_div.style.display = 'none';
         } else {
@@ -158,14 +140,31 @@ const CLSCombo = ({ data, value_field, descrip_field, tabIndex = "", id, onKeyUp
     });
 
     if (any_value) {
-      let current_selection = combo_div.querySelector('.selected');
+      let current_selection = document.querySelector('#comboData .selected');
       if(current_selection) current_selection.classList.remove('selected');
-      combo_div.querySelector('div:not([style*="display: none"])').classList.add('selected');
+      document.querySelector('#comboData div:not([style*="display: none"])').classList.add('selected');
     };
   }
 
+  const getComboElement = ({index, value, description}) => {
+    return (
+      <div key={index} order={index} value={value || ""} onMouseDown={ev => selectElement(ev)} onMouseOver={ev => _onMouseOver(ev)} onMouseOut={ev => _onMouseOut(ev)}>
+        {description}
+      </div>
+    );
+  }
+
+  const combo_data = data.map((el, i) => {
+    return getComboElement({index: i, value: el[value_field], description: el[descrip_field]});
+  })
   return (
-    <input id={id} onFocus={ev => _onFocus(ev)} onKeyUp={ev => { onKeyUp(ev); }} tabIndex={tabIndex}></input>
+    <>
+      <input id={id} onFocus={ev => _onFocus(ev)} onKeyUp={ev => onKeyUp(ev)} tabIndex={tabIndex}></input>
+      <span id="comboData" onKeyDown={ev => _onKeyDown(ev)} onKeyUp={ev => _onKeyUp(ev)} onInput={ev => _onInput(ev)}>
+        <input></input>
+        {combo_data}
+      </span>
+    </>
   );
 }
 

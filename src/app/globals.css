@@ -107,6 +107,11 @@ a, input, button {
   background: linear-gradient(45deg, #864BA2, #3230bf);
 }
 
+.slideAnimation {
+  transform: translateY(0);
+  opacity: 0;
+  animation: slide 0.75s ease-in-out forwards;
+}
 
 /* ANIMATIONS */
 @keyframes slide {

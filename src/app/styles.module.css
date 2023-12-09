@@ -30,6 +30,8 @@
 }
 
 .inputsGroup > div, .inputsGroup > button {
+    position: relative;
+
     height: 12vh;
     margin-top: 25px;
     width: 80%;

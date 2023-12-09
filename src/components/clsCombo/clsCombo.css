@@ -1,11 +1,20 @@
 #comboData {
+    position: absolute;
+    height: unset;
+    max-height: 40vh;
+
+    opacity: 0;
+    display: none;
+
     border-radius: 10px;
     background: linear-gradient(90deg, #864BA2, #5a4ba2);
     padding: 10px;
     border: var(--main-border);
 
+    color: white;
+
     overflow-y: auto;
-    max-height: 40%;
+    z-index: 1;
 }
 
 #comboData input {
@@ -24,9 +33,4 @@
     font-size: 20px;
     font-weight: bold;
     cursor: pointer;
-}
-
-#comboData {
-    opacity: 0;
-    animation: slide 0.4s linear forwards;
 }

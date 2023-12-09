@@ -89,7 +89,7 @@ export default function Page() {
                     <CurrencyInput id="amountInput" placeholder="0.00€" onValueChange={inpChange} groupSeparator='.' decimalSeparator=',' suffix='€' 
                         onKeyUp={(ev) => onEnterPress(ev, 1)} tabIndex={1}></CurrencyInput>
                 </div>
-                <div>
+                <div style={{zIndex: 1}}>
                     <span>Categoría</span>
                     <CLSCombo id="categoryInput" data={categoryData} descrip_field="descrip" value_field="id" tabIndex="2" onKeyUp={ev => onEnterPress(ev, 2)}></CLSCombo>
                 </div>
