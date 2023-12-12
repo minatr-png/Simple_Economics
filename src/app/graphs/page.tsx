@@ -10,18 +10,39 @@ import { useEffect, useState } from 'react';
 
 const db = new PocketBase(database_url);
 
-let current_year = new Date().getFullYear(), expenses_chart, categories_chart, expenses_ctx, categories_ctx;    
+const default_year = new Date().getFullYear();
+let expenses_chart, categories_chart, expenses_ctx, categories_ctx;    
 export default function Page() {
+    let [current_year, setCurrentYear] = useState(default_year);
     let [years, setYears] = useState([]);
+    let [expenses_rows, setExpensesRows] = useState([
+        <tr key={0}><td></td> <td>Gastos</td> <td>Total</td></tr>,
+        <tr key={1}><td>Enero</td> <td style={{background: 'rgb(112, 178, 112)'}}>0€</td> <td style={{background: 'rgb(112, 178, 112)'}}>0€</td></tr>,
+        <tr key={2}><td>Febero</td> <td style={{background: 'rgb(112, 178, 112)'}}>0€</td> <td style={{background: 'rgb(112, 178, 112)'}}>0€</td></tr>,
+        <tr key={3}><td>Marzo</td> <td style={{background: 'rgb(112, 178, 112)'}}>0€</td> <td style={{background: 'rgb(112, 178, 112)'}}>0€</td></tr>,
+        <tr key={4}><td>Abril</td> <td style={{background: 'rgb(112, 178, 112)'}}>0€</td> <td style={{background: 'rgb(112, 178, 112)'}}>0€</td></tr>,
+        <tr key={5}><td>Mayo</td> <td style={{background: 'rgb(112, 178, 112)'}}>0€</td> <td style={{background: 'rgb(112, 178, 112)'}}>0€</td></tr>,
+        <tr key={6}><td>Junio</td> <td style={{background: 'rgb(112, 178, 112)'}}>0€</td> <td style={{background: 'rgb(112, 178, 112)'}}>0€</td></tr>,
+        <tr key={7}><td>Julio</td> <td style={{background: 'rgb(112, 178, 112)'}}>0€</td> <td style={{background: 'rgb(112, 178, 112)'}}>0€</td></tr>,
+        <tr key={8}><td>Agosto</td> <td style={{background: 'rgb(112, 178, 112)'}}>0€</td> <td style={{background: 'rgb(112, 178, 112)'}}>0€</td></tr>,
+        <tr key={9}><td>Septiembre</td> <td style={{background: 'rgb(112, 178, 112)'}}>0€</td> <td style={{background: 'rgb(112, 178, 112)'}}>0€</td></tr>,
+        <tr key={10}><td>Octubre</td> <td style={{background: 'rgb(112, 178, 112)'}}>0€</td> <td style={{background: 'rgb(112, 178, 112)'}}>0€</td></tr>,
+        <tr key={11}><td>Noviembre</td> <td style={{background: 'rgb(112, 178, 112)'}}>0€</td> <td style={{background: 'rgb(112, 178, 112)'}}>0€</td></tr>,
+        <tr key={12}><td>Diciembre</td> <td style={{background: 'rgb(112, 178, 112)'}}>0€</td> <td style={{background: 'rgb(112, 178, 112)'}}>0€</td></tr>
+    ]);
+
+    //Effect to run on first load
     useEffect(() => {
-        db.collection('vExpensesYears').getFullList({ fields: 'year', sort: 'year'}).then(res => {
+        db.collection('vExpensesYears').getFullList({ fields: 'year', sort: 'year', requestKey: ''}).then(res => {
             setYears(res.map(el => el.year));
         });
-
-        loadCharts();
-
-        loadAnnotations();
     }, []);
+
+    //Effect to run on Current_Year change
+    useEffect(() => {
+        loadCharts();
+        loadAnnotations();
+    }, [current_year]);
 
     const loadCharts = () => {
         // Generating Expenses chart without values
@@ -141,6 +162,10 @@ export default function Page() {
                 });
                 categories_html.setAttribute('loaded', 'true');
             }
+        }).catch(err => {
+            if (!err.isAbort) {
+                throw err;
+            }
         });
     }
 
@@ -191,58 +216,49 @@ export default function Page() {
         };
         
         const grouped_expenses = groupExpenses(expenses);
-        //const thead = document.querySelector('#expensesTable thead') as HTMLTableSectionElement;
-        const tbody = document.querySelector('#expensesTable tbody') as HTMLTableSectionElement;
 
-        //thead.innerHTML = '';
-        tbody.innerHTML = '';
-
-        const header_row = tbody.insertRow();
-        header_row.insertCell();
         
         //Creating table
-        let min_total_expense = 0, max_total_expense = null;
+        let header_cells = [<td></td>], new_expenses_rows_cells = []; 
+        let totals = [], min_total_expense = 0, max_total_expense = null;
         const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-        for (let i = 1; i <= 12; i++) {
-            const tbody_row = tbody.insertRow();
-
-            const tbody_title_cell = tbody_row.insertCell();
-            tbody_title_cell.innerText = months[i-1];
+        for (let i = 1; i <= 12; i++) {    
+            let cells = [];
+            cells.push(<td>{months[i-1]}</td>);
 
             //Creating category cells
             let row_total = 0;
             categories.forEach(category => {
                 if(i === 1) {
-                    const thead_cell = header_row.insertCell();
-                    thead_cell.textContent = category;
+                    header_cells.push(<td>{category}</td>);
                 }
                 
-                const tbody_cell = tbody_row.insertCell();
                 const current_expense = grouped_expenses[i+'-'+category] || 0;
-                tbody_cell.style.background = calculateCellColor(current_expense, min_expense, 0);
-                tbody_cell.textContent = current_expense + '€';
+                const background_color = calculateCellColor(current_expense, min_expense, 0);
                 row_total += current_expense;
+
+                cells.push(<td style={{background: background_color}}>{current_expense+'€'}</td>);
             });
 
-            //Creating total cells
-            const tbody_cell = tbody_row.insertCell();
-            tbody_cell.textContent = row_total + '€';
-            tbody_cell.setAttribute('value', row_total+'');
-
+            totals.push(row_total);
             if(row_total < min_total_expense) min_total_expense = row_total;
             if(row_total > max_total_expense || max_total_expense === null) max_total_expense = row_total;
+
+            new_expenses_rows_cells.push(cells);
         }
 
-        header_row.insertCell().innerText = 'Total';
+        header_cells.push(<td>Total</td>);
 
-        //Setting conditional formatting for total column
-        tbody.querySelectorAll('td:last-child').forEach((cell:any) => {
-            const cell_value = parseInt(cell.getAttribute('value'))
-            cell.style.background = calculateCellColor(cell_value, min_total_expense, max_total_expense);
+        let new_expenses_rows = [];
+        new_expenses_rows_cells.forEach((row, i) => {
+            row.push(<td style={{backgroundColor: calculateCellColor(totals[i], min_total_expense, max_total_expense)}}>{totals[i]+'€'}</td>);
+            new_expenses_rows.push(<tr key={i}>{row}</tr>);
         });
+
+        setExpensesRows(([<tr key={0}>{header_cells}</tr>, ...new_expenses_rows]));
     };
 
-    const calculateCellColor = (value, minValue, maxValue) => {
+    const calculateCellColor = (value:number, minValue:number, maxValue:number) => {
         const red = [204, 102, 102];
         const yellow = [204, 204, 102];
         const green = [112, 178, 112];
@@ -282,6 +298,10 @@ export default function Page() {
                 text_area.value = annotation.annotation;
                 text_area.setAttribute('registerId', annotation.id);
             });
+        }).catch(err => {
+            if (!err.isAbort) {
+                throw err;
+            }
         });
     };
 
@@ -316,17 +336,15 @@ export default function Page() {
 
     const onYearChange = (year) => {
         if (year !== current_year) {
-            current_year = year;
-            loadCharts();
-            loadAnnotations();
+            setCurrentYear(year);
         }
     };
-
+    
     return (
         <div id="moduleContainer" className={styles.graphsPage + " bg-economics"}>
             <ToastContainer />
             <div className={styles.header}>
-                <CLSYearSwitch default_year={current_year} years={years} onChange={year => onYearChange(year)}></CLSYearSwitch>
+                <CLSYearSwitch default_year={default_year} years={years} onChange={year => onYearChange(year)}></CLSYearSwitch>
             </div>
             <div className={styles.body}>
                 <div className={styles.graphs}>
@@ -339,9 +357,10 @@ export default function Page() {
                 </div>
                 <div className={styles.tables}>
                     <table className={styles.expensesTable} id="expensesTable">
-                       <tbody></tbody>
+                       <tbody>
+                            { expenses_rows }
+                       </tbody>
                     </table>
-
                     <table id="annotationsTable">
                        <thead>
                             <tr>
