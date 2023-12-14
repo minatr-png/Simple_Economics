@@ -99,7 +99,9 @@ export default function Page() {
         }
 
         //Retrieving databse values
-        db.collection('vExpenses').getFullList({fields: 'amount, category, month', sort: 'date',filter: `date >= '${current_year}-01-01' && date <= '${current_year}-12-31'`}).then(res => {
+        db.collection('vExpenses').getFullList(
+            {fields: 'amount, category, month', sort: 'date',filter: `date >= '${current_year}-01-01' && date <= '${current_year}-12-31'`}
+        ).then(res => {
             //Iterating through databse results
             let expenses = [0,0,0,0,0,0,0,0,0,0,0,0], balance = [0,0,0,0,0,0,0,0,0,0,0,0], categories_data = {};
             res.forEach(expense => {
