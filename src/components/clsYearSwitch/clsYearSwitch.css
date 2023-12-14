@@ -43,6 +43,7 @@
 
 /*Loaded Years*/
 .yearsContainer {
+    display: none;
     position: relative;
 
     height: 50vh;

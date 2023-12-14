@@ -1,5 +1,5 @@
 import './clsCombo.css';
-import { BounceLoader } from 'react-spinners';
+import { MoonLoader } from 'react-spinners';
 
 const CLSCombo = ({ data, value_field, descrip_field, tabIndex = "", id, onKeyUp }) => {
 
@@ -163,7 +163,14 @@ const CLSCombo = ({ data, value_field, descrip_field, tabIndex = "", id, onKeyUp
       <input id={id} onFocus={ev => _onFocus(ev)} onKeyUp={ev => onKeyUp(ev)} tabIndex={tabIndex}></input>
       <span id="comboData" onKeyDown={ev => _onKeyDown(ev)} onKeyUp={ev => _onKeyUp(ev)} onInput={ev => _onInput(ev)}>
         <input></input>
-        {combo_data}
+        {data?.length ?
+          combo_data
+        :
+          <div className="loadingData">
+            <MoonLoader size={20} color="white" speedMultiplier={0.95}/>
+            <span className="loadingText">Loading data...</span>
+          </div>
+        }
       </span>
     </>
   );

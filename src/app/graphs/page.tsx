@@ -252,7 +252,7 @@ export default function Page() {
         let new_expenses_rows = [];
         new_expenses_rows_cells.forEach((row, i) => {
             row.push(<td style={{backgroundColor: calculateCellColor(totals[i], min_total_expense, max_total_expense)}}>{totals[i]+'€'}</td>);
-            new_expenses_rows.push(<tr key={i}>{row}</tr>);
+            new_expenses_rows.push(<tr key={i+1}>{row}</tr>);
         });
 
         setExpensesRows(([<tr key={0}>{header_cells}</tr>, ...new_expenses_rows]));

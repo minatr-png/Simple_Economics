@@ -34,3 +34,15 @@
     font-weight: bold;
     cursor: pointer;
 }
+
+.loadingData {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    padding-top: 10px;
+}
+
+.loadingData span.loadingText {
+    padding-left: 6px;
+}
