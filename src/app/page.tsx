@@ -75,9 +75,10 @@ export default function Page() {
         return  amount < 0 ? 'Faltan campos por rellenar' : null;
     }
 
-    const setTotal = (new_total) => {
-        setTotalMoneyValue(new_total);
-        const value = formatValue({value: new_total+'', groupSeparator: '.', decimalSeparator: ','});
+    const setTotal = (new_total:number) => {
+        let fixed_value = new_total.toFixed(2)
+        setTotalMoneyValue(Number(fixed_value));//Añadiwr decimals limit
+        const value = formatValue({value: fixed_value, groupSeparator: '.', decimalSeparator: ','});
         setTotalMoney(value);
     }
 
@@ -87,7 +88,7 @@ export default function Page() {
                 <div>
                     <span>Gasto</span>
                     <CurrencyInput id="amountInput" placeholder="0.00€" onValueChange={inpChange} groupSeparator='.' decimalSeparator=',' suffix='€' 
-                        onKeyUp={(ev) => onEnterPress(ev, 1)} tabIndex={1}></CurrencyInput>
+                        decimalsLimit={2} onKeyUp={(ev) => onEnterPress(ev, 1)} tabIndex={1}></CurrencyInput>
                 </div>
                 <div style={{zIndex: 1}}>
                     <span>Categoría</span>

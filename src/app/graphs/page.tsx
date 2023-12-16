@@ -16,7 +16,7 @@ export default function Page() {
     let [current_year, setCurrentYear] = useState(default_year);
     let [years, setYears] = useState([]);
     let [expenses_rows, setExpensesRows] = useState([
-        <tr key={0}><td></td> <td>Gastos</td> <td>Total</td></tr>,
+        <tr key={0}><td> </td> <td>Gastos</td> <td>Total</td></tr>,
         <tr key={1}><td>Enero</td> <td style={{background: 'rgb(112, 178, 112)'}}>0€</td> <td style={{background: 'rgb(112, 178, 112)'}}>0€</td></tr>,
         <tr key={2}><td>Febero</td> <td style={{background: 'rgb(112, 178, 112)'}}>0€</td> <td style={{background: 'rgb(112, 178, 112)'}}>0€</td></tr>,
         <tr key={3}><td>Marzo</td> <td style={{background: 'rgb(112, 178, 112)'}}>0€</td> <td style={{background: 'rgb(112, 178, 112)'}}>0€</td></tr>,
@@ -221,7 +221,7 @@ export default function Page() {
 
         
         //Creating table
-        let header_cells = [<td></td>], new_expenses_rows_cells = []; 
+        let header_cells = [<td> </td>], new_expenses_rows_cells = []; 
         let totals = [], min_total_expense = 0, max_total_expense = null;
         const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
         for (let i = 1; i <= 12; i++) {    
@@ -366,7 +366,7 @@ export default function Page() {
                     <table id="annotationsTable">
                        <thead>
                             <tr>
-                                <td></td>
+                                <td> </td>
                                 <td>Anotaciones</td>
                             </tr>
                        </thead>

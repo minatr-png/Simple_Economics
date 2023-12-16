@@ -1,6 +1,6 @@
 {
-  "name": "project_celeste",
-  "version": "0.1.0",
+  "name": "simple_economics",
+  "version": "0.9.0",
   "private": true,
   "scripts": {
     "dev": "next dev",

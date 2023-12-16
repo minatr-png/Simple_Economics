@@ -10,8 +10,7 @@
     flex-direction: column;
     align-items: center;
 
-    padding: 4px;
-
+    min-width: 87px;
     border-top: var(--main-border);
     border-bottom: var(--main-border);
     background: rgb(255 255 255 / 8%);
@@ -35,18 +34,45 @@
     background: rgb(255 255 255 / 10%);
 }
 
+.body > div > div:first-child {
+    width: 100%;
+    width: -moz-available;
+    width: -webkit-fill-available;
+    width: stretch;
+
+    padding: 4px;
+    background: rgb(255 255 255 / 20%);
+    
+    text-align: center;
+}
+
+.body > div:first-child > div:first-child {
+    border-radius: 10px 0 0 0;
+}
+
+.body > div:last-child > div:first-child {
+    border-radius: 0 10px 0 0;
+}
+
 .body > div > div:last-child {
+    display: flex;
+    flex-direction: column;
+
     height: 100%;
     overflow-y: auto;
+    padding: 4px;
 }
 
 .body > div > div:last-child::-webkit-scrollbar {
     display: none;
 }
 
-.body > div > div > div{
+.body > div > div > input {
     border-radius: 10px;
+    background-color: transparent;
+    padding: 4px;
+    text-align: center;
+    font-size: 16px;
+    width: 70px;
 
-    padding: 7px;
-    margin: 3px;
 }
