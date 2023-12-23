@@ -67,12 +67,22 @@
     display: none;
 }
 
-.body > div > div > input {
+.body input {
     border-radius: 10px;
     background-color: transparent;
     padding: 4px;
     text-align: center;
     font-size: 16px;
     width: 70px;
+}
 
+.body .addExpense{
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.body .contextMenu {
+    display: none;
+    position: absolute;
 }
