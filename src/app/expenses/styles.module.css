@@ -59,12 +59,18 @@
     flex-direction: column;
 
     height: 100%;
+    width: 100%;
     overflow-y: auto;
     padding: 4px;
 }
 
 .body > div > div:last-child::-webkit-scrollbar {
     display: none;
+}
+
+.body > div > div:last-child span[expense-id] {
+    display: flex;
+    justify-content: center;
 }
 
 .body input {
@@ -76,10 +82,20 @@
     width: 70px;
 }
 
-.body .addExpense{
+.body input:hover {
+    border: var(--main-border);
+}
+
+.body .addExpense {
     text-align: center;
     font-weight: bold;
     cursor: pointer;
+}
+
+.body .addExpense:hover {
+    text-shadow: 0px 0px 3px #d8d8d8;
+    transform: scale(1.4);
+    transition: all 0.3s;
 }
 
 .body .contextMenu {

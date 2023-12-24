@@ -161,8 +161,6 @@ export default function Page() {
             "amount": update_value,
             "date": `${current_year}-${str_month}-01`
         };
-
-        console.log(data);
         
         db.collection('Expenses').create(data).then(() => {
             input.style.color = update_value < 0 ? "rgb(214 80 80)" : "rgb(112 178 112)";
