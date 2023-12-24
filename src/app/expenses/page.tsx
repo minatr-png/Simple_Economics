@@ -67,10 +67,15 @@ export default function Page() {
             }
 
             result[month].push(
-                <span expense-id={obj.id}>
-                    <CurrencyInput onValueChange={(_, __, values) => update_value = values.float} onBlur={ev => _onBlur(ev.target)}
-                    id={obj.id} key={obj.id} groupSeparator='.' decimalSeparator=',' suffix='€' decimalsLimit={2} defaultValue={obj.amount} name={obj.amount}
-                    style={obj.amount < 0 ? {color: "rgb(214 80 80)"} : {color: "rgb(112 178 112)"}} onContextMenu={(ev) => {ev.preventDefault();console.log(obj.amount)}}></CurrencyInput>
+                <span title={obj.category} expense-id={obj.id}>
+                    <CurrencyInput 
+                        id={obj.id} key={obj.id} name={obj.amount}
+                        onValueChange={(_, __, values) => update_value = values.float} 
+                        onContextMenu={(ev) => _onContextMenu(ev)}
+                        onBlur={ev => _onBlur(ev.target)}
+                        groupSeparator='.' decimalSeparator=',' suffix='€' decimalsLimit={2} defaultValue={obj.amount}
+                        style={obj.amount < 0 ? {color: "rgb(214 80 80)"} : {color: "rgb(112 178 112)"}}
+                    />
                     <ContextMenu categories={categories_elements} currentCategory={obj.category}/>
                 </span>
             );
@@ -81,7 +86,17 @@ export default function Page() {
     };
 
     const setNewCategory = (category, element) => {
-        const expense = element.closest('span[expense-id]').getAttribute('expense-id');
+        const expense_span = element.closest('span[expense-id]');
+        const expense = expense_span.getAttribute('expense-id');
+
+        if (!expense_span.querySelector('input').name.startsWith('-')) {
+            toast.info('No se puede añadir una categoría a un ingreso', {
+                position: 'bottom-right',
+                autoClose: 1700
+            });
+
+            return;
+        }
 
         const data = {"category": category};
 
@@ -109,7 +124,26 @@ export default function Page() {
         }
 
         deleteExpense(input);
-    }
+    };
+
+    const _onContextMenu = (ev) => {
+        ev.preventDefault();
+
+        const old_context_menu = document.querySelector('.contextMenu[visible]');
+        if (old_context_menu) old_context_menu.removeAttribute('visible');
+
+        let context_menu:HTMLElement = ev.currentTarget.parentElement.querySelector('div');
+        context_menu.style.left = ev.clientX + 'px';
+        context_menu.style.top = ev.clientY + 'px';
+        context_menu.setAttribute('visible', 'true');
+
+        window.addEventListener('click', () => _onOuterClick(context_menu));
+    };
+
+    const _onOuterClick = (context_menu:HTMLElement) => {
+        //years_container.classList.remove('slideAnimation');
+        context_menu.removeAttribute('visible');
+    };
 
     const insertExpense = (input, month) => {
         let str_month = month < 10 ? '0' + month : month+'';
@@ -131,14 +165,21 @@ export default function Page() {
         });
     }
 
-    const updateExpense = (input) => {
-        const data = {
-            "amount": update_value
-        };
+    const updateExpense = (input:HTMLInputElement) => {
+        let data:any = {"amount": update_value};
+
+        if (update_value > 0) {
+            data = {
+                "amount": update_value,
+                "category": null
+            }
+        }
         
         db.collection('Expenses').update(input.id, data).then(() => {
             input.style.color = update_value < 0 ? "rgb(214 80 80)" : "rgb(112 178 112)";
             input.name = update_value+"";
+
+            if (update_value > 0) input.parentElement.querySelector('.currentCategory').textContent = '';
 
             toast.success('Gasto actualizado', {
                 position: 'bottom-right',
@@ -165,28 +206,29 @@ export default function Page() {
     };
 
     const addExpense = (month) => {
-    setExpenses(prevExpenses => {
-        const newExpenses = { ...prevExpenses };
+        setExpenses(prevExpenses => {
+            const newExpenses = { ...prevExpenses };
 
-        if (!newExpenses[month]) {
-            newExpenses[month] = [];
-        }
+            if (!newExpenses[month]) {
+                newExpenses[month] = [];
+            }
 
-        newExpenses[month] = [
-            ...newExpenses[month],
-            <CurrencyInput
-                onValueChange={(_, __, values) => update_value = values.float}
-                onBlur={ev => _onBlur(ev.target, month)}
-                groupSeparator='.' decimalSeparator=','
-                suffix='€' decimalsLimit={2}
-                defaultValue={0}
-                name={0 + ''}
-            ></CurrencyInput>
-        ];
+            newExpenses[month] = [
+                ...newExpenses[month],
+                <CurrencyInput
+                    onValueChange={(_, __, values) => update_value = values.float}
+                    onBlur={ev => _onBlur(ev.target, month)}
+                    onContextMenu={(ev) => _onContextMenu(ev)}
+                    groupSeparator='.' decimalSeparator=','
+                    suffix='€' decimalsLimit={2}
+                    defaultValue={0}
+                    name={0 + ''}
+                ></CurrencyInput>
+            ];
 
-        return newExpenses;
-    });
-};
+            return newExpenses;
+        });
+    };
 
 
     return (
@@ -286,13 +328,23 @@ export default function Page() {
     );
 
     function ContextMenu({categories, currentCategory}) {
-      return (
-        <div className={styles.contextMenu}>
-            <div className="currentCategory">{currentCategory}</div>
-            <span>
-                {categories}
-            </span>
-        </div>
+        const showCategories = (element:HTMLElement) => {
+            const categories_list = element.parentElement.querySelector('span');
+            if (categories_list.checkVisibility()) {
+                categories_list.style.display = 'none';
+            } else {
+                categories_list.style.display = 'block';
+            }
+        };
+
+        return(
+            <div className={styles.contextMenu + ' contextMenu'} onClick={ev => ev.stopPropagation()}>
+                <div className="currentCategory">{currentCategory}</div>
+                <div onClick={ev => showCategories(ev.currentTarget)}>Change category</div>
+                <span>
+                    {categories}
+                </span>
+            </div>
         );
     }
   }

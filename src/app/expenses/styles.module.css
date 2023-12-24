@@ -85,4 +85,25 @@
 .body .contextMenu {
     display: none;
     position: absolute;
+
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.492);
+    border-radius: 10px;
+}
+
+.body .contextMenu[visible] {
+    display: block;
+}
+
+.body .contextMenu div {
+    cursor: pointer;
+    margin-bottom: 5px;
+}
+
+.body .contextMenu span {
+    display: none;
+}
+
+.body .contextMenu span div {
+    padding-left: 13px;
 }
