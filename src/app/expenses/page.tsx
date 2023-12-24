@@ -25,37 +25,36 @@ export default function Page() {
     //Effect to run on Current_Year change
     const is_first_render = useRef(true);
     useEffect(() => {
-        try {
-            //On first load Categories and Expenses will be loaded at the same time to avoid rendering errors
-            if(is_first_render.current) {
-                is_first_render.current = false;
+        //On first load Categories and Expenses will be loaded at the same time to avoid rendering errors
+        if(is_first_render.current) {
+            is_first_render.current = false;
 
-                Promise.all([
-                    db.collection('categories').getFullList({ fields: 'id, descrip', sort: 'order' }),
-                    db.collection('vExpenses').getFullList({
-                        fields: 'id, amount, month, category', sort: 'date, created',filter: `date >= '${current_year}-01-01' && date <= '${current_year}-12-31'`
-                    })
-                ]).then (([categories, dbExpenses]) => {
-                    categories_elements = categories.map(category => {
-                        return <div id={category.id} key={category.id} onClick={ev => setNewCategory(category.id, ev.target)}>{category.descrip}</div>
-                    });
-        
-                    loadExpenses(dbExpenses);
+            Promise.all([
+                db.collection('categories').getFullList({ fields: 'id, descrip', sort: 'order' }),
+                db.collection('vExpenses').getFullList({
+                    fields: 'id, amount, month, category', sort: 'date, created',filter: `date >= '${current_year}-01-01' && date <= '${current_year}-12-31'`
                 })
-                
-                return;
-            }
+            ]).then (([categories, dbExpenses]) => {
+                categories_elements = categories.map(category => {
+                    return <div id={category.id} key={category.id} className={styles.clickable} onClick={ev => setNewCategory(category.id, ev.target)}>{category.descrip}</div>
+                });
+    
+                loadExpenses(dbExpenses);
+            }).catch(err => { throw err; })
+            
+            return;
+        }
 
-            //On every other load just Expenses will be reloaded
-            db.collection('vExpenses').getFullList({
-                fields: 'id, amount, month, category', sort: 'date, created',filter: `date >= '${current_year}-01-01' && date <= '${current_year}-12-31'`
-            })
-            .then(res => loadExpenses(res));
-        } catch (err) {
+        //On every other load just Expenses will be reloaded
+        db.collection('vExpenses').getFullList({
+            fields: 'id, amount, month, category', sort: 'date, created',filter: `date >= '${current_year}-01-01' && date <= '${current_year}-12-31'`
+        })
+        .then(res => loadExpenses(res))
+        .catch(err => { 
             if (!err.isAbort) {
                 throw err;
             }
-        }
+        });
     }, [current_year]);
 
     let update_value = 0;
@@ -101,7 +100,7 @@ export default function Page() {
         const data = {"category": category};
 
         db.collection('Expenses').update(expense, data).then(() => {
-            element.closest('div[class]').querySelector('div.currentCategory').textContent = element.textContent;
+            element.closest('div.contextMenu').querySelector('div.currentCategory').textContent = element.textContent;
 
             toast.success('Gasto actualizado', {
                 position: 'bottom-right',
@@ -133,12 +132,23 @@ export default function Page() {
         if (old_context_menu) old_context_menu.removeAttribute('visible');
 
         let context_menu:HTMLElement = ev.currentTarget.parentElement.querySelector('div');
-        context_menu.style.left = ev.clientX + 'px';
-        context_menu.style.top = ev.clientY + 'px';
+        const position = getModalPosition(context_menu, ev);
+
         context_menu.setAttribute('visible', 'true');
+        context_menu.style.left = position.left + 'px';
+        context_menu.style.top = position.top + 'px';
+        
 
         window.addEventListener('click', () => _onOuterClick(context_menu));
     };
+
+    const getModalPosition = (context_menu:HTMLElement, ev) => {
+        if (document.body.clientWidth > (ev.clientX + context_menu.clientWidth + 5)) {
+            return { left: ev.clientX, top: ev.clientY };
+        }
+
+        return { left: (ev.clientX - context_menu.offsetWidth - 5), top: ev.clientY };
+    }
 
     const _onOuterClick = (context_menu:HTMLElement) => {
         //years_container.classList.remove('slideAnimation');
@@ -338,9 +348,9 @@ export default function Page() {
         };
 
         return(
-            <div className={styles.contextMenu + ' contextMenu'} onClick={ev => ev.stopPropagation()}>
+            <div title="" className={styles.contextMenu + ' contextMenu'} onClick={ev => ev.stopPropagation()}>
                 <div className="currentCategory">{currentCategory}</div>
-                <div onClick={ev => showCategories(ev.currentTarget)}>Change category</div>
+                <div className={styles.clickable} onClick={ev => showCategories(ev.currentTarget)}>Change category</div>
                 <span>
                     {categories}
                 </span>

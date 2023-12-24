@@ -83,27 +83,42 @@
 }
 
 .body .contextMenu {
-    display: none;
+    visibility: hidden;
     position: absolute;
 
-    padding: 10px;
-    background-color: rgba(0, 0, 0, 0.492);
+    padding: 7px 11px;
+    background-color: rgb(63 63 63 / 53%);
     border-radius: 10px;
+    backdrop-filter: blur(2px);
+    font-size: 15px;
+    border: var(--main-border);
 }
 
 .body .contextMenu[visible] {
-    display: block;
+    visibility: visible;
 }
 
 .body .contextMenu div {
-    cursor: pointer;
+    padding: 2px 5px;
     margin-bottom: 5px;
+    border-radius: 5px;
+}
+
+.body .contextMenu div.clickable {
+    padding: 5px;
+
+    cursor: pointer;
+    user-select: none;
+}
+
+.body .contextMenu div.clickable:hover {
+    background-color: #7e48a5;
 }
 
 .body .contextMenu span {
     display: none;
 }
 
-.body .contextMenu span div {
-    padding-left: 13px;
+.body .contextMenu span div.clickable {
+    padding-left: 17px;
 }
