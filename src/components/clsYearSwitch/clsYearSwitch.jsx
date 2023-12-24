@@ -16,7 +16,7 @@ const CLSYearSwitch = ({default_year = new Date().getFullYear(), years = [], onC
         onChange(new_year);
     };
 
-    const showYearsPopup = (input) => {
+    const showYearsPopup = () => {
         let years_container = document.querySelector(".yearsContainer");
         
         //Show combo element
@@ -47,7 +47,7 @@ const CLSYearSwitch = ({default_year = new Date().getFullYear(), years = [], onC
 
     return (
         <span className="yearSwitchContainer">
-            <div onClick={() => modifyCurrentYear(-1)} style={(years[0] === current_year ? {visibility: 'hidden'} : {visibility: 'visible'})}>&lt;</div>
+            <div onClick={() => modifyCurrentYear(-1)} style={(years[0] === current_year || years.length === 0 ? {visibility: 'hidden'} : {visibility: 'visible'})}>&lt;</div>
             <div className="mainSwitchBtn" onClick={ev => showYearsPopup(ev.currentTarget)}>
                 <div>{current_year}</div>
                 <span className="yearsContainer">{years_elements}</span>
