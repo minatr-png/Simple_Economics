@@ -94,7 +94,7 @@ export default function Page() {
         <div id="moduleContainer" className={general_styles.economics + " bg-economics"}>
             <AddRecordLayout params={{btnTitle: "Añadir Categoría", btnFunction: submitCategory}} >
                 <div>
-                    <span>Categoría: </span>
+                    <span>Categoría</span>
                     <input id="descripInput" type="text" placeholder="Otros" required tabIndex={1} onKeyUp={(ev) => onEnterPress(ev, 1, true)}></input>
                 </div>
             </AddRecordLayout>

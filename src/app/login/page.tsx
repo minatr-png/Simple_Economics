@@ -10,9 +10,12 @@ import { useRouter } from 'next/navigation';
 
 export default function Page() {
     
+    let [custom_server, setCustomServer] = useState(false);
+
     const router = useRouter();
     const login = () => {
         //Revisar login
+        debugger;
         router.push("/");
     };
 
@@ -23,10 +26,14 @@ export default function Page() {
                     <img src='/logo.png' ></img>
                 </div>
                 <div className={styles.inputs}>
-                    <div>
-                        <div>URL</div>
-                        <input tabIndex={1} onKeyUp={(ev) => onEnterPress(ev, 1, false)}></input>
-                    </div>
+                    {custom_server ? 
+                        <div>
+                            <div>URL</div>
+                            <input tabIndex={1} onKeyUp={(ev) => onEnterPress(ev, 1, false)}></input>
+                        </div>
+                        :
+                        <></>
+                    }
                     <div>
                         <div>Email</div>
                         <input tabIndex={2} type="email" onKeyUp={(ev) => onEnterPress(ev, 2, false)}></input>
@@ -34,6 +41,9 @@ export default function Page() {
                     <div>
                         <div>Contraseña</div>
                         <input tabIndex={3} id="dateInput" type="password" onKeyUp={(ev) => onEnterPress(ev, 3, true)} required></input>
+                    </div>
+                    <div>
+                        <input onChange={() => setCustomServer(!custom_server)} type="checkbox"/> Servidor propio
                     </div>
                     <button id="MainButton" onClick={login}>Iniciar sesión</button>
                 </div>

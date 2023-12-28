@@ -3,7 +3,7 @@ const onEnterPress = (ev, tabIndex:number, lastInput:boolean=false) => {
     
     if(lastInput || ev.shiftKey) {
         document.getElementById("MainButton").click();
-        (document.querySelector(`[tabindex="1"]`) as any).focus();
+        (document.querySelector(`[tabindex]`) as any).focus();
     } else {
         (document.querySelector(`[tabindex="${tabIndex+1}"]`) as any).focus();
     }

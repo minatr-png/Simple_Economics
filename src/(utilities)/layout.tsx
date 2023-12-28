@@ -1,4 +1,4 @@
-import styles from '../app/styles.module.css';
+import styles from '../app/(logged)/styles.module.css';
 
 export function AddRecordLayout({
     children,
@@ -10,8 +10,6 @@ export function AddRecordLayout({
       btnFunction
     }
 }) {
-    // URL -> /shop/shoes/nike-air-max-97
-    // `params` -> { tag: 'shoes', item: 'nike-air-max-97' }
     return (
       <div className={styles.inputsGroup}>
         {children}
@@ -25,8 +23,6 @@ export function NavButtonsLayout({
 }: {
   children: React.ReactNode
 }) {
-  // URL -> /shop/shoes/nike-air-max-97
-  // `params` -> { tag: 'shoes', item: 'nike-air-max-97' }
   return (
     <div className={styles.navigationGroup}>
       {children}
