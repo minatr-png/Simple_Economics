@@ -21,8 +21,7 @@ export default function RootLayout({
         {children}
         <div id="NavigationLogo">
           <Link href="/"><img src='/logo.png' ></img></Link>
-          <CLSNavButton title="<" goBack={true}></CLSNavButton>
-          <CLSNavButton title=">" goForward={true}></CLSNavButton>
+          <CLSNavButton logout={true}/>
         </div>
       </body>
     </html>

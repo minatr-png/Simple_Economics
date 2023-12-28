@@ -76,7 +76,7 @@ a, input, button {
   font-size: 30px;
 }
 
-#NavigationLogo img {
+#NavigationLogo a img {
   max-height: 39px;
   float: left;
 
@@ -89,8 +89,8 @@ a, input, button {
 }
 
 #NavigationLogo  button > span {
-  height: 26px;
-  width: 26px;
+  height: 23px;
+  width: 23px;
 
   display: flex;
   align-items: center;
@@ -100,6 +100,13 @@ a, input, button {
   border: 1px solid rgb(255 255 255 / 28%);
   border-radius: 5px;
   font-size: 20px;
+  margin-top: 5px;
+  margin-left: 10px;
+}
+
+#NavigationLogo  button > span:hover {
+  box-shadow: 0 0 10px -2px white;
+  transition: all 0.3s ease-in-out;
 }
 
 /*Economics global*/
@@ -111,6 +118,80 @@ a, input, button {
   transform: translateY(0);
   opacity: 0;
   animation: slide 0.75s ease-in-out forwards;
+}
+
+/* Modals styles */
+.modalWrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99;
+}
+
+.modalWrapper .backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.modalWrapper .modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+
+  padding: 45px 30px 30px 30px;
+  background: linear-gradient(45deg, #562d6a, #6540ad);
+  border-radius: 10px;
+  font-size: 16px;
+  box-shadow: rgb(255 255 255 / 26%) 0px 10px 36px 0px, rgb(255 255 255 / 16%) 0px 0px 0px 1px;
+
+  cursor: default;
+  z-index: 100;
+}
+
+.modalContent {
+    position: relative;
+}
+
+.modalWrapper .modal .modalContent img {
+  height: 68px;
+  border-radius: 50%;
+  border: 5px solid #5d368a;
+  position: absolute;
+  top: -133%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.modalWrapper .modal .modalContent .buttons {
+  display: flex;
+  justify-content: space-around;
+
+  margin-top: 16px;
+  color: #5c3589;
+}
+
+.modalWrapper .modal .modalContent .buttons > div:hover {
+  box-shadow: 0 0 10px -2px white;
+  transition: all 0.5s;
+}
+
+.modalWrapper .modal .modalContent .buttons > div {
+  background-color: white;
+  padding: 5px 40px;
+  border-radius: 10px;
+
+  cursor: pointer;
 }
 
 /* ANIMATIONS */
