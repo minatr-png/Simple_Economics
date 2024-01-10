@@ -85,7 +85,7 @@ export default function Page() {
     };
 
     const setNewCategory = (category, element) => {
-        const expense_span = element.closest('span[expense-id]');
+        const expense_span = element.closest('span[title]');
         const expense = expense_span.getAttribute('expense-id');
 
         if (!expense_span.querySelector('input').name.startsWith('-')) {
@@ -100,7 +100,18 @@ export default function Page() {
         const data = {"category": category};
 
         db.collection('Expenses').update(expense, data).then(() => {
-            element.closest('div.contextMenu').querySelector('div.currentCategory').textContent = element.textContent;
+            const context_menu:HTMLElement = element.closest('div.contextMenu');
+            const current_category_div =  context_menu.querySelector('div.currentCategory');
+            if (current_category_div) {
+                current_category_div.textContent = element.textContent;
+            } else {
+                const category_div = document.createElement('div');
+                category_div.textContent = element.textContent;
+                category_div.classList.add('currentCategory');
+                
+                context_menu.prepend(document.createElement('hr'));
+                context_menu.prepend(category_div);
+            }
 
             toast.success('Gasto actualizado', {
                 position: 'bottom-right',
@@ -162,7 +173,10 @@ export default function Page() {
             "date": `${current_year}-${str_month}-01`
         };
         
-        db.collection('Expenses').create(data).then(() => {
+        db.collection('Expenses').create(data).then(res => {
+            const category_span = input.closest('span');
+            category_span.setAttribute("expense-id", res.id);
+
             input.style.color = update_value < 0 ? "rgb(214 80 80)" : "rgb(112 178 112)";
             input.name = update_value+"";
 
@@ -223,15 +237,18 @@ export default function Page() {
 
             newExpenses[month] = [
                 ...newExpenses[month],
-                <CurrencyInput
-                    onValueChange={(_, __, values) => update_value = values.float}
-                    onBlur={ev => _onBlur(ev.target, month)}
-                    onContextMenu={(ev) => _onContextMenu(ev)}
-                    groupSeparator='.' decimalSeparator=','
-                    suffix='€' decimalsLimit={2}
-                    defaultValue={0}
-                    name={0 + ''}
-                ></CurrencyInput>
+                <span title="Sin categoría">
+                    <CurrencyInput
+                        onValueChange={(_, __, values) => update_value = values.float}
+                        onBlur={ev => _onBlur(ev.target, month)}
+                        onContextMenu={(ev) => _onContextMenu(ev)}
+                        groupSeparator='.' decimalSeparator=','
+                        suffix='€' decimalsLimit={2}
+                        defaultValue={0}
+                        name={0 + ''}
+                    ></CurrencyInput>
+                    <ContextMenu categories={categories_elements} currentCategory=""/>
+                </span>
             ];
 
             return newExpenses;
@@ -345,9 +362,17 @@ export default function Page() {
             }
         };
 
+        let current_category_div;
+        if (currentCategory) {
+            current_category_div =<>
+                <div className="currentCategory">{currentCategory}</div>
+                <hr></hr>
+            </>
+        }
+
         return(
             <div title="" className={styles.contextMenu + ' contextMenu'} onClick={ev => ev.stopPropagation()}>
-                <div className="currentCategory">{currentCategory}</div>
+                {current_category_div}
                 <div className={styles.clickable} onClick={ev => showCategories(ev.currentTarget)}>Change category</div>
                 <span>
                     {categories}
